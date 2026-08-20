@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi tienda</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #111;
+      background: #fff;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid #eee;
+    }
+
+    .topbar {
+      max-width: 1100px;
+      margin: auto;
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+      font-size: 13px;
+    }
+
+    nav a {
+      color: #111;
+      text-decoration: none;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    #cartButton {
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 45px 24px 90px;
+    }
+
+    .intro {
+      margin-bottom: 65px;
+    }
+
+    .intro h1 {
+      margin: 0 0 10px;
+      font-size: clamp(32px, 5vw, 58px);
+      font-weight: 600;
+      letter-spacing: -.04em;
+    }
+
+    .intro p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    section { margin-bottom: 80px; }
+
+    .section-title {
+      font-size: 12px;
+      letter-spacing: .12em;
+      margin-bottom: 22px;
+      text-transform: uppercase;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px 18px;
+    }
+
+    .product-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #f1f1f1;
+      display: grid;
+      place-items: center;
+      color: #999;
+      font-size: 12px;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding-top: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .product-name {
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .product-price {
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .add {
+      margin-top: 9px;
+      padding: 0;
+      border: 0;
+      background: none;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .add:hover { opacity: .55; }
+
+    /* Carrito */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.18);
+      z-index: 20;
+      display: none;
+    }
+
+    .overlay.open { display: block; }
+
+    .cart {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100vh;
+      width: min(420px, 100%);
+      background: white;
+      z-index: 21;
+      transform: translateX(100%);
+      transition: transform .2s ease;
+      border-left: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart.open { transform: translateX(0); }
+
+    .cart-header {
+      padding: 22px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .cart-header button {
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    #cartItems {
+      padding: 10px 22px;
+      overflow: auto;
+      flex: 1;
+    }
+
+    .cart-item {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      font-size: 13px;
+    }
+
+    .cart-item small {
+      display: block;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .quantity {
+      white-space: nowrap;
+    }
+
+    .quantity button {
+      border: 0;
+      background: none;
+      cursor: pointer;
+      padding: 0 5px;
+    }
+
+    .cart-footer {
+      border-top: 1px solid #eee;
+      padding: 22px;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .order-button {
+      width: 100%;
+      border: 1px solid #111;
+      background: #111;
+      color: #fff;
+      padding: 13px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .empty {
+      color: #777;
+      font-size: 13px;
+      padding: 25px 0;
+    }
+
+    @media (max-width: 800px) {
+      .products { grid-template-columns: repeat(2, 1fr); }
+      nav { display: none; }
+    }
+
+    @media (max-width: 450px) {
+      .products { gap: 24px 12px; }
+      main { padding-left: 16px; padding-right: 16px; }
+      .topbar { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <div class="logo">MI TIENDA</div>
+      <nav>
+        <a href="#posters">posters</a>
+        <a href="#stickers">stickers</a>
+        <a href="#chapitas">chapitas</a>
+      </nav>
+      <button id="cartButton">carrito (<span id="cartCount">0</span>)</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="intro">
+      <h1>cositas que hice</h1>
+      <p>ilustraciones, stickers y otras cosas.</p>
+    </div>
+
+    <section id="posters">
+      <div class="section-title">posters</div>
+      <div class="products">
+        <article class="product">
+          <div class="product-image">FOTO DEL PRODUCTO</div>
+          <div class="product-info">
+            <div class="product-name">Poster gato espacial</div>
+            <div class="product-price">$5.000</div>
+          </div>
+          <button class="add" data-name="Poster gato espacial" data-price="5000">agregar</button>
+        </article>
+
+        <article class="product">
+          <div class="product-image">FOTO DEL PRODUCTO</div>
+          <div class="product-info">
+            <div class="product-name">Poster personaje</div>
+            <div class="product-price">$5.000</div>
+          </div>
+          <button class="add" data-name="Poster personaje" data-price="5000">agregar</button>
+        </article>
+
+        <article class="product">
+          <div class="product-image">FOTO DEL PRODUCTO</div>
+          <div class="product-info">
+            <div class="product-name">Poster ilustración</div>
+            <div class="product-price">$6.000</div>
+          </div>
+          <button class="add" data-name="Poster ilustración" data-price="6000">agregar</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="stickers">
+      <div class="section-title">stickers</div>
+      <div class="products">
+        <article class="product">
+          <div class="product-image">FOTO DEL PRODUCTO</div>
+          <div class="product-info">
+            <div class="product-name">Sticker gato</div>
+            <div class="product-price">$2.000</div>
+          </div>
+          <button class="add" data-name="Sticker gato" data-price="2000">agregar</button>
+        </article>
+
+        <article class="product">
+          <div class="product-image">FOTO DEL PRODUCTO</div>
+          <div class="product-info">
+            <div class="product-name">Sticker alien</div>
+            <div class="product-price">$2.000</div>
+          </div>
+          <button class="add" data-name="Sticker alien" data-price="2000">agregar</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="chapitas">
+      <div class="section-title">chapitas</div>
+      <div class="products">
+        <article class="product">
+          <div class="product-image">FOTO DEL PRODUCTO</div>
+          <div class="product-info">
+            <div class="product-name">Chapita personaje</div>
+            <div class="product-price">$1.500</div>
+          </div>
+          <button class="add" data-name="Chapita personaje" data-price="1500">agregar</button>
+        </article>
+
+        <article class="product">
+          <div class="product-image">FOTO DEL PRODUCTO</div>
+          <div class="product-info">
+            <div class="product-name">Chapita gato</div>
+            <div class="product-price">$1.500</div>
+          </div>
+          <button class="add" data-name="Chapita gato" data-price="1500">agregar</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="cart" id="cart">
+    <div class="cart-header">
+      <span>tu carrito</span>
+      <button id="closeCart">×</button>
+    </div>
+
+    <div id="cartItems">
+      <div class="empty">tu carrito está vacío.</div>
+    </div>
+
+    <div class="cart-footer">
+      <div class="total">
+        <span>total</span>
+        <strong id="cartTotal">$0</strong>
+      </div>
+      <button class="order-button" id="orderButton">enviar pedido</button>
+    </div>
+  </aside>
+
+  <script>
+    const cart = {};
+    const cartButton = document.getElementById("cartButton");
+    const closeCart = document.getElementById("closeCart");
+    const cartPanel = document.getElementById("cart");
+    const overlay = document.getElementById("overlay");
+    const cartItems = document.getElementById("cartItems");
+    const cartCount = document.getElementById("cartCount");
+    const cartTotal = document.getElementById("cartTotal");
+
+    function money(n) {
+      return "$" + n.toLocaleString("es-CL");
+    }
+
+    function openCart() {
+      cartPanel.classList.add("open");
+      overlay.classList.add("open");
+    }
+
+    function closeCartPanel() {
+      cartPanel.classList.remove("open");
+      overlay.classList.remove("open");
+    }
+
+    function renderCart() {
+      const items = Object.values(cart);
+      let count = 0;
+      let total = 0;
+
+      items.forEach(item => {
+        count += item.quantity;
+        total += item.price * item.quantity;
+      });
+
+      cartCount.textContent = count;
+      cartTotal.textContent = money(total);
+
+      if (!items.length) {
+        cartItems.innerHTML = '<div class="empty">tu carrito está vacío.</div>';
+        return;
+      }
+
+      cartItems.innerHTML = items.map(item => `
+        <div class="cart-item">
+          <div>
+            ${item.name}
+            <small>${money(item.price)} c/u</small>
+          </div>
+          <div class="quantity">
+            <button onclick="changeQuantity('${item.name}', -1)">−</button>
+            ${item.quantity}
+            <button onclick="changeQuantity('${item.name}', 1)">+</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function changeQuantity(name, amount) {
+      if (!cart[name]) return;
+      cart[name].quantity += amount;
+      if (cart[name].quantity <= 0) delete cart[name];
+      renderCart();
+    }
+
+    document.querySelectorAll(".add").forEach(button => {
+      button.addEventListener("click", () => {
+        const name = button.dataset.name;
+        const price = Number(button.dataset.price);
+
+        if (!cart[name]) cart[name] = { name, price, quantity: 0 };
+        cart[name].quantity++;
+        renderCart();
+      });
+    });
+
+    cartButton.addEventListener("click", openCart);
+    closeCart.addEventListener("click", closeCartPanel);
+    overlay.addEventListener("click", closeCartPanel);
+
+    document.getElementById("orderButton").addEventListener("click", () => {
+      const items = Object.values(cart);
+      if (!items.length) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+
+      const text = items.map(item =>
+        `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}`
+      ).join("\\n");
+
+      const total = items.reduce((sum, item) =>
+        sum + item.price * item.quantity, 0
+      );
+
+      const message =
+        `Hola! Quiero hacer este pedido:\\n\\n${text}\\n\\nTotal: ${money(total)}`;
+
+      // Por ahora muestra el pedido. Después podemos conectarlo
+      // a WhatsApp, correo, formulario o Google Forms.
+      alert(message);
+    });
+
+    renderCart();
+  </script>
+</body>
+</html>
