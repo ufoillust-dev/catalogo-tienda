@@ -301,17 +301,18 @@
       content: '+ ';
     }
 
-    /* ===== MODAL ===== */
+    /* ===== MODAL - FONDO TRANSPARENTE ===== */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(255, 255, 255, .98);
+      background: rgba(0, 0, 0, 0.3);
       z-index: 30;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 30px;
-      backdrop-filter: blur(2px);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
 
     .modal-overlay.open {
@@ -327,7 +328,7 @@
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
       animation: modalFadeIn 0.3s ease;
     }
 
@@ -377,7 +378,6 @@
       object-fit: contain;
     }
 
-    /* ===== CURSOR LUPA EN PC ===== */
     @media (pointer: fine) {
       .modal-image-wrapper {
         cursor: zoom-in;
@@ -461,17 +461,18 @@
       border-color: #bbb;
     }
 
-    /* ===== ZOOM FLOTANTE (SOLO PC) ===== */
+    /* ===== ZOOM FLOTANTE - FONDO TRANSPARENTE ===== */
     .zoom-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(255, 255, 255, .98);
+      background: rgba(0, 0, 0, 0.4);
       z-index: 50;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 40px;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .zoom-overlay.open {
@@ -509,11 +510,13 @@
       object-fit: contain;
       display: block;
       image-rendering: auto;
-      transition: none;
-      pointer-events: none;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, .15);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, .2);
       border-radius: 8px;
       cursor: default;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .zoom-overlay .zoom-container.zoomed img {
@@ -532,19 +535,19 @@
       position: fixed;
       top: 24px;
       right: 30px;
-      color: #333;
+      color: white;
       font-size: 36px;
       font-weight: 300;
       cursor: pointer;
       z-index: 51;
       transition: opacity 0.2s;
-      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.8);
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
       line-height: 1;
       font-family: 'Segoe UI', Arial, sans-serif;
       background: none;
       border: none;
       padding: 0;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     .zoom-overlay .close-zoom:hover {
@@ -1009,7 +1012,7 @@
     </div>
   </div>
 
-  <!-- ZOOM FLOTANTE (SOLO PC) -->
+  <!-- ZOOM FLOTANTE -->
   <div class="zoom-overlay" id="zoomOverlay">
     <button class="close-zoom" id="closeZoom">✕</button>
     <div class="zoom-container" id="zoomContainer">
@@ -1161,21 +1164,21 @@
       currentProductId = null;
     }
 
-    // Click en la imagen del modal - SOLO EN PC abre zoom flotante
     document.getElementById('modalImageWrapper').addEventListener('click', function(e) {
-      if (isMobile) return; // En móvil no hace nada
+      if (isMobile) return;
       const img = document.getElementById('modalImage');
       if (img.src) {
         openZoom(img.src);
       }
     });
 
-    // ===================== ZOOM FLOTANTE (SOLO PC) =====================
+    // ===================== ZOOM FLOTANTE =====================
     let zoomScale = 1;
     let zoomImageSrc = '';
     let isZoomDragging = false;
     let zoomStartX, zoomStartY, zoomPosX = 0, zoomPosY = 0;
     let zoomStartPosX, zoomStartPosY;
+    let rafId = null;
 
     const zoomOverlay = document.getElementById('zoomOverlay');
     const zoomContainer = document.getElementById('zoomContainer');
@@ -1197,17 +1200,27 @@
       zoomOverlay.classList.remove('open');
       document.body.style.overflow = '';
       zoomContainer.classList.remove('zoomed');
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
     }
 
     function updateZoomTransform() {
-      zoomImage.style.transform = `scale(${zoomScale}) translate(${zoomPosX}px, ${zoomPosY}px)`;
-      if (zoomScale > 1) {
-        zoomContainer.classList.add('zoomed');
-      } else {
-        zoomContainer.classList.remove('zoomed');
-        zoomPosX = 0;
-        zoomPosY = 0;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
       }
+      rafId = requestAnimationFrame(() => {
+        zoomImage.style.transform = `scale(${zoomScale}) translate(${zoomPosX}px, ${zoomPosY}px)`;
+        if (zoomScale > 1) {
+          zoomContainer.classList.add('zoomed');
+        } else {
+          zoomContainer.classList.remove('zoomed');
+          zoomPosX = 0;
+          zoomPosY = 0;
+        }
+      });
     }
 
     function zoomIn() {
@@ -1224,24 +1237,14 @@
       updateZoomTransform();
     }
 
-    function resetZoom() {
-      zoomScale = 1;
-      zoomPosX = 0;
-      zoomPosY = 0;
-      updateZoomTransform();
-    }
-
-    // Cerrar zoom con X
     document.getElementById('closeZoom').addEventListener('click', closeZoom);
 
-    // Cerrar zoom al hacer clic en el overlay (fuera de la imagen)
     zoomOverlay.addEventListener('click', function(e) {
       if (e.target === this) {
         closeZoom();
       }
     });
 
-    // Zoom con rueda del mouse
     zoomOverlay.addEventListener('wheel', function(e) {
       e.preventDefault();
       if (e.deltaY > 0) {
@@ -1251,7 +1254,6 @@
       }
     }, { passive: false });
 
-    // Arrastrar con mouse
     zoomContainer.addEventListener('mousedown', function(e) {
       if (zoomScale > 1) {
         isZoomDragging = true;
@@ -1281,7 +1283,6 @@
       }
     });
 
-    // Tecla ESC
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         if (zoomOverlay.classList.contains('open')) {
