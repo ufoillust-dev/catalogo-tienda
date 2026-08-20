@@ -617,7 +617,6 @@
 <body>
   <header>
     <div class="topbar">
-      <!-- ===== LOGO EN PNG - FUNCIONA EN TODOS LOS DISPOSITIVOS ===== -->
       <div class="logo">
         <img src="logo.png" alt="UFO STORE">
       </div>
@@ -660,7 +659,6 @@
         <button class="filtro-btn" data-categoria="posters">posters</button>
         <button class="filtro-btn" data-categoria="stickers">stickers</button>
         <button class="filtro-btn" data-categoria="chapitas">chapitas</button>
-        <button class="filtro-btn" data-categoria="ilustraciones">ilustraciones</button>
       </div>
 
       <div class="products" id="catalogoContainer"></div>
@@ -700,25 +698,32 @@
   </footer>
 
   <script>
+    // ===================== DATOS DE PRODUCTOS =====================
     const productos = [
+      // Destacados
       { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/400/400", destacado: true },
       { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/400/400", destacado: true },
       { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/400/400", destacado: true },
       { id: 4, nombre: "Chapita personaje", precio: 1500, categoria: "chapitas", imagen: "https://picsum.photos/seed/chapita/400/400", destacado: true },
+
+      // Posters
       { id: 5, nombre: "Poster ciudad nocturna", precio: 5500, categoria: "posters", imagen: "https://picsum.photos/seed/ciudad/400/400" },
       { id: 6, nombre: "Poster espacio profundo", precio: 7000, categoria: "posters", imagen: "https://picsum.photos/seed/espacio/400/400" },
       { id: 12, nombre: "Poster aurora boreal", precio: 6500, categoria: "posters", imagen: "https://picsum.photos/seed/aurora/400/400" },
+
+      // Stickers
       { id: 7, nombre: "Sticker alien", precio: 1800, categoria: "stickers", imagen: "https://picsum.photos/seed/alien/400/400" },
       { id: 8, nombre: "Sticker planeta", precio: 2200, categoria: "stickers", imagen: "https://picsum.photos/seed/planeta/400/400" },
       { id: 9, nombre: "Sticker cohete", precio: 2500, categoria: "stickers", imagen: "https://picsum.photos/seed/cohete/400/400" },
       { id: 13, nombre: "Sticker constelación", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/constelacion/400/400" },
+
+      // Chapitas
       { id: 10, nombre: "Chapita sol", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/sol/400/400" },
       { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/400/400" },
-      { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/400/400" },
-      { id: 15, nombre: "Ilustración galaxia", precio: 8500, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/galaxia/400/400" },
-      { id: 16, nombre: "Ilustración astronauta", precio: 9000, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/astronauta/400/400" }
+      { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/400/400" }
     ];
 
+    // ===================== CARRITO =====================
     let cart = {};
 
     function loadCart() {
