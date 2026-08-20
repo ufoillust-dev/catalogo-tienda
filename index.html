@@ -1096,4 +1096,37 @@
           return;
         }
 
-        const
+        const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        let subject = `Nuevo pedido de ${nombre} - UFO STORE`;
+        let body = `DATOS DEL CLIENTE:\nNombre: ${nombre}\nCorreo: ${email}\n\nDETALLE DEL PEDIDO:\n`;
+        items.forEach(item => {
+          body += `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}\n`;
+        });
+        body += `\nTotal: ${money(total)}\n\nMuchas gracias por tu pedido!`;
+
+        const emailDestino = "ufoillust@gmail.com";
+        const mailtoLink = `mailto:${emailDestino}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        window.open(mailtoLink, '_blank');
+        showToast('📧 Pedido enviado por correo');
+        setTimeout(() => closeCartPanel(), 500);
+      });
+
+      validarFormulario();
+    }
+
+    // ===================== INICIALIZAR =====================
+    function init() {
+      loadCart();
+      renderizarProductos(productos, 'destacadosContainer', true);
+      renderizarProductos(productos, 'catalogoContainer');
+      setupFilters();
+      setupNavigation();
+      setupCartUI();
+      renderCart();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
