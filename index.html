@@ -265,6 +265,28 @@
       filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
     }
 
+    /* ===== CHAPITAS EN CATÁLOGO ===== */
+    .product-image.chapitas img {
+      border-radius: 50%;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+      border: 2px solid rgba(200, 200, 200, 0.3);
+    }
+
+    .product-image.chapitas::after {
+      content: '';
+      position: absolute;
+      top: 18%;
+      left: 28%;
+      width: 28%;
+      height: 20%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.6;
+      transform: rotate(-20deg);
+      z-index: 2;
+    }
+
     .product-info {
       padding-top: 14px;
       display: flex;
@@ -388,7 +410,7 @@
       background: #f5f5f5;
     }
 
-    /* ===== STICKERS EN MODAL - SIN ZOOM, CON SOMBRA Y TRANSPARENTE ===== */
+    /* ===== STICKERS EN MODAL ===== */
     .modal-image-wrapper.sticker {
       cursor: default !important;
       background: transparent;
@@ -403,11 +425,45 @@
       filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.25));
     }
 
+    /* ===== CHAPITAS EN MODAL ===== */
+    .modal-image-wrapper.chapitas {
+      background: transparent !important;
+      cursor: default !important;
+    }
+
+    .modal-image-wrapper.chapitas img {
+      border-radius: 50%;
+      background: transparent;
+      max-height: 70vh;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.25));
+      border: 3px solid rgba(200, 200, 200, 0.3);
+    }
+
+    .modal-image-wrapper.chapitas::after {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 25%;
+      width: 35%;
+      height: 25%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.7;
+      transform: rotate(-20deg);
+    }
+
     @media (pointer: fine) {
       .modal-image-wrapper {
         cursor: zoom-in;
       }
       .modal-image-wrapper.sticker {
+        cursor: default !important;
+      }
+      .modal-image-wrapper.chapitas {
         cursor: default !important;
       }
     }
@@ -1387,7 +1443,7 @@
         nombre: "Chapita Toriel", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-toriel.jpg", 
+        imagen: "img/chapita-toriel.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Toriel. Metal resistente con cierre de seguridad." 
       },
@@ -1396,7 +1452,7 @@
         nombre: "Chapita Asgore", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-asgore.jpg", 
+        imagen: "img/chapita-asgore.png", 
         destacado: true, 
         descripcion: "Chapita de 37mm con diseño de Asgore. Ideal para mochilas, chaquetas o gorras." 
       },
@@ -1405,7 +1461,7 @@
         nombre: "Chapita Von Lycaon", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-von-lycaon-37mm.jpg", 
+        imagen: "img/chapita-von-lycaon-37mm.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Von Lycaon. Metal de alta calidad." 
       },
@@ -1414,7 +1470,7 @@
         nombre: "Chapita Ben Bigger", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-ben-bigger.jpg", 
+        imagen: "img/chapita-ben-bigger.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Ben Bigger. Resistente y duradera." 
       },
@@ -1423,7 +1479,7 @@
         nombre: "Chapita Pan Yinhu", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-pan-yinhu.jpg", 
+        imagen: "img/chapita-pan-yinhu.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Pan Yinhu. Perfecta para tu colección." 
       },
@@ -1432,7 +1488,7 @@
         nombre: "Chapita Roxy", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-roxy.jpg", 
+        imagen: "img/chapita-roxy.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Roxy. Ideal para mochilas y chaquetas." 
       },
@@ -1441,7 +1497,7 @@
         nombre: "Chapita Glamrock Chica", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-glamrock-chica.jpg", 
+        imagen: "img/chapita-glamrock-chica.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Glamrock Chica. Metal resistente." 
       },
@@ -1450,7 +1506,7 @@
         nombre: "Chapita Monty", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-monty.jpg", 
+        imagen: "img/chapita-monty.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Monty. Cierre de seguridad incluido." 
       },
@@ -1459,7 +1515,7 @@
         nombre: "Chapita Juddy Hopps", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-juddy-hopps.jpg", 
+        imagen: "img/chapita-juddy-hopps.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Juddy Hopps. Ideal para fans de Zootopia." 
       },
@@ -1468,7 +1524,7 @@
         nombre: "Chapita Nick Wilde", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-nick-wilde.jpg", 
+        imagen: "img/chapita-nick-wilde.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Nick Wilde. Metal de alta calidad." 
       },
@@ -1477,7 +1533,7 @@
         nombre: "Chapita Juan Carlos Bodoque", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-juan-carlos-bodoque.jpg", 
+        imagen: "img/chapita-juan-carlos-bodoque.png", 
         destacado: false, 
         descripcion: "Chapita de 37mm con diseño de Juan Carlos Bodoque. Ideal para fans de 31 Minutos." 
       },
@@ -1488,7 +1544,7 @@
         nombre: "Chapita Von Lycaon 58mm", 
         precio: 3000, 
         categoria: "chapitas", 
-        imagen: "img/chapita-von-lycaon-58mm.jpg", 
+        imagen: "img/chapita-von-lycaon-58mm.png", 
         destacado: true, 
         descripcion: "Chapita de 58mm con diseño de Von Lycaon. Tamaño grande, metal resistente." 
       },
@@ -1497,7 +1553,7 @@
         nombre: "Chapita Volibear 58mm", 
         precio: 3000, 
         categoria: "chapitas", 
-        imagen: "img/chapita-volibear-spirit-blossom-springs-58mm.jpg", 
+        imagen: "img/chapita-volibear-spirit-blossom-springs-58mm.png", 
         destacado: false, 
         descripcion: "Chapita de 58mm con diseño de Volibear Spirit Blossom Springs. Ideal para destacar." 
       },
@@ -1506,7 +1562,7 @@
         nombre: "Chapita Hajime 58mm", 
         precio: 3000, 
         categoria: "chapitas", 
-        imagen: "img/chapita-hajime-58mm.jpg", 
+        imagen: "img/chapita-hajime-58mm.png", 
         destacado: false, 
         descripcion: "Chapita de 58mm con diseño de Hajime. Gran tamaño para lucir." 
       },
@@ -1515,7 +1571,7 @@
         nombre: "Chapita Hung 58mm", 
         precio: 3000, 
         categoria: "chapitas", 
-        imagen: "img/chapita-hung-58mm.jpg", 
+        imagen: "img/chapita-hung-58mm.png", 
         destacado: false, 
         descripcion: "Chapita de 58mm con diseño de Hung. Perfecta para chaquetas y mochilas." 
       },
@@ -1524,7 +1580,7 @@
         nombre: "Chapita Gummigoo, Chad y Max 58mm", 
         precio: 3000, 
         categoria: "chapitas", 
-        imagen: "img/chapita-gummigoo-chad-max-58mm.jpg", 
+        imagen: "img/chapita-gummigoo-chad-max-58mm.png", 
         destacado: false, 
         descripcion: "Chapita de 58mm con diseño de Gummigoo, Chad y Max. ¡Tres personajes en una!" 
       }
@@ -1609,12 +1665,14 @@
       const modalImage = document.getElementById('modalImage');
       const modalWrapper = document.getElementById('modalImageWrapper');
       
-      modalWrapper.classList.remove('poster', 'sticker');
+      modalWrapper.classList.remove('poster', 'sticker', 'chapitas');
       
       if (producto.categoria === 'posters') {
         modalWrapper.classList.add('poster');
       } else if (producto.categoria === 'stickers') {
         modalWrapper.classList.add('sticker');
+      } else if (producto.categoria === 'chapitas') {
+        modalWrapper.classList.add('chapitas');
       }
       
       modalImage.src = producto.imagen;
@@ -1633,10 +1691,11 @@
       currentProductId = null;
     }
 
-    // ===== CLICK EN LA IMAGEN DEL MODAL =====
+    // ===== CLICK EN LA IMAGEN DEL MODAL (sin zoom en stickers y chapitas) =====
     document.getElementById('modalImageWrapper').addEventListener('click', function(e) {
       const isSticker = this.classList.contains('sticker');
-      if (isSticker) return; // Los stickers NO tienen zoom
+      const isChapita = this.classList.contains('chapitas');
+      if (isSticker || isChapita) return;
       if (isMobile) return;
       const img = document.getElementById('modalImage');
       if (img.src) {
