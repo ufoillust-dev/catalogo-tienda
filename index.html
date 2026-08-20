@@ -58,6 +58,7 @@
       text-decoration: none;
       transition: opacity 0.2s;
       position: relative;
+      cursor: pointer;
     }
 
     nav a::after {
@@ -228,10 +229,14 @@
       content: '+ ';
     }
 
-    /* Catálogo */
-    .catalog {
-      padding-top: 60px;
-      border-top: 1px solid #eee;
+    /* Catálogo - Página separada */
+    .catalog-page {
+      display: none;
+      padding-top: 20px;
+    }
+
+    .catalog-page.active {
+      display: block;
     }
 
     .catalog-header {
@@ -277,6 +282,24 @@
     .filtro-btn.active {
       background: #111;
       color: #fff;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 30px;
+      color: #666;
+      text-decoration: none;
+      font-size: 13px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #111;
+    }
+
+    .back-link::before {
+      content: '← ';
     }
 
     /* Carrito */
@@ -538,29 +561,35 @@
     <div class="topbar">
       <div class="logo">✦ UFO STORE</div>
       <nav>
-        <a href="#inicio">inicio</a>
-        <a href="#catalogo">catálogo</a>
+        <a id="navInicio">inicio</a>
+        <a id="navCatalogo">catálogo</a>
       </nav>
       <button id="cartButton">🛒 <span id="cartCount">0</span></button>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <h1>productos que me gustan</h1>
-        <p>una selección de mis ilustraciones y productos.</p>
-      </div>
-    </section>
+    <!-- PÁGINA DE INICIO -->
+    <div id="paginaInicio">
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>productos nuevos</h1>
+          <p>una selección de mis ilustraciones y productos.</p>
+        </div>
+      </section>
 
-    <section id="destacados" class="featured">
-      <div class="section-heading">
-        <span>✦ destacados</span>
-      </div>
-      <div class="products featured-products" id="destacadosContainer"></div>
-    </section>
+      <section id="destacados" class="featured">
+        <div class="section-heading">
+          <span>✦ destacados</span>
+        </div>
+        <div class="products featured-products" id="destacadosContainer"></div>
+      </section>
+    </div>
 
-    <section id="catalogo" class="catalog">
+    <!-- PÁGINA DE CATÁLOGO -->
+    <div id="paginaCatalogo" class="catalog-page">
+      <a class="back-link" id="volverInicio">volver al inicio</a>
+      
       <div class="catalog-header">
         <h2>todos los productos</h2>
         <p>explora toda la colección</p>
@@ -575,7 +604,7 @@
       </div>
 
       <div class="products" id="catalogoContainer"></div>
-    </section>
+    </div>
   </main>
 
   <!-- Overlay y Carrito -->
@@ -594,7 +623,7 @@
         <span>total</span>
         <strong id="cartTotal">$0</strong>
       </div>
-      <button class="order-button" id="orderButton">enviar pedido por WhatsApp</button>
+      <button class="order-button" id="orderButton">enviar pedido por correo</button>
     </div>
   </aside>
 
@@ -605,7 +634,7 @@
   <script>
     // ===================== DATOS DE PRODUCTOS =====================
     const productos = [
-      // Destacados
+      // Destacados (solo estos se muestran en la página principal)
       { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/400/400", destacado: true },
       { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/400/400", destacado: true },
       { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/400/400", destacado: true },
@@ -627,7 +656,7 @@
       { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/400/400" },
       { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/400/400" },
 
-      // Ilustraciones (nueva categoría)
+      // Ilustraciones
       { id: 15, nombre: "Ilustración galaxia", precio: 8500, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/galaxia/400/400" },
       { id: 16, nombre: "Ilustración astronauta", precio: 9000, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/astronauta/400/400" }
     ];
@@ -635,7 +664,6 @@
     // ===================== CARRITO =====================
     let cart = {};
 
-    // Cargar carrito desde localStorage
     function loadCart() {
       const saved = localStorage.getItem('ufoCart');
       if (saved) {
@@ -744,7 +772,6 @@
         </article>
       `).join("");
 
-      // Agregar eventos a los botones "agregar"
       contenedor.querySelectorAll('.add').forEach(btn => {
         btn.addEventListener('click', function() {
           const name = this.dataset.name;
@@ -760,7 +787,6 @@
 
       buttons.forEach(btn => {
         btn.addEventListener('click', function() {
-          // Actualizar estado activo
           buttons.forEach(b => b.classList.remove('active'));
           this.classList.add('active');
 
@@ -772,6 +798,34 @@
           renderizarProductos(filtrados, 'catalogoContainer');
         });
       });
+    }
+
+    // ===================== NAVEGACIÓN =====================
+    function setupNavigation() {
+      const paginaInicio = document.getElementById('paginaInicio');
+      const paginaCatalogo = document.getElementById('paginaCatalogo');
+      const navInicio = document.getElementById('navInicio');
+      const navCatalogo = document.getElementById('navCatalogo');
+      const volverInicio = document.getElementById('volverInicio');
+
+      function mostrarInicio() {
+        paginaInicio.style.display = 'block';
+        paginaCatalogo.classList.remove('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function mostrarCatalogo() {
+        paginaInicio.style.display = 'none';
+        paginaCatalogo.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      navInicio.addEventListener('click', mostrarInicio);
+      navCatalogo.addEventListener('click', mostrarCatalogo);
+      volverInicio.addEventListener('click', mostrarInicio);
+
+      // Por defecto mostrar inicio
+      mostrarInicio();
     }
 
     // ===================== CARRITO UI =====================
@@ -797,14 +851,13 @@
       closeCart.addEventListener('click', closeCartPanel);
       overlay.addEventListener('click', closeCartPanel);
 
-      // Cerrar con Escape
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && cartPanel.classList.contains('open')) {
           closeCartPanel();
         }
       });
 
-      // Botón de pedido
+      // ===================== ENVIAR POR CORREO =====================
       document.getElementById('orderButton').addEventListener('click', () => {
         const items = Object.values(cart);
         if (!items.length) {
@@ -813,17 +866,26 @@
         }
 
         const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        let mensaje = "¡Hola! Quiero hacer este pedido:%0A%0A";
+        
+        // Construir el cuerpo del correo
+        let subject = "Nuevo pedido - UFO STORE";
+        let body = "Hola, quiero hacer este pedido:\n\n";
+        
         items.forEach(item => {
-          mensaje += `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}%0A`;
+          body += `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}\n`;
         });
-        mensaje += `%0ATotal: ${money(total)}%0A%0AGracias!`;
+        body += `\nTotal: ${money(total)}\n\n`;
+        body += "Gracias!";
 
-        // Cambia este número por el tuyo (formato: código país + número sin +)
-        const telefono = "56912345678";
-        const url = `https://wa.me/${telefono}?text=${mensaje}`;
+        // Cambia este correo por el tuyo
+        const email = "tucorreo@ejemplo.com";
+        const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-        window.open(url, '_blank');
+        // Abrir el cliente de correo
+        window.open(mailtoLink, '_blank');
+        
+        // Opcional: cerrar el carrito después de enviar
+        closeCartPanel();
       });
     }
 
@@ -833,6 +895,7 @@
       renderizarProductos(productos, 'destacadosContainer', true);
       renderizarProductos(productos, 'catalogoContainer');
       setupFilters();
+      setupNavigation();
       setupCartUI();
       renderCart();
     }
