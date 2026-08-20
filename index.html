@@ -3,28 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi tienda</title>
+  <title>UFO STORE - Catálogo Online</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
       color: #111;
       background: #fff;
+      line-height: 1.5;
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 10;
-      background: rgba(255,255,255,.96);
+      background: rgba(255, 255, 255, .96);
       border-bottom: 1px solid #eee;
+      backdrop-filter: blur(8px);
     }
 
     .topbar {
       max-width: 1100px;
       margin: auto;
-      padding: 22px 24px;
+      padding: 20px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -32,23 +38,42 @@
     }
 
     .logo {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
-      letter-spacing: .02em;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, #111 0%, #444 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     nav {
       display: flex;
-      gap: 22px;
+      gap: 28px;
       font-size: 13px;
+      font-weight: 500;
     }
 
     nav a {
       color: #111;
       text-decoration: none;
+      transition: opacity 0.2s;
+      position: relative;
     }
 
-    nav a:hover { text-decoration: underline; }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #111;
+      transition: width 0.2s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
 
     #cartButton {
       border: 0;
@@ -56,103 +81,217 @@
       cursor: pointer;
       font: inherit;
       font-size: 13px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 30px;
+      transition: background 0.2s;
+    }
+
+    #cartButton:hover {
+      background: #f5f5f5;
     }
 
     main {
       max-width: 1100px;
       margin: auto;
-      padding: 45px 24px 90px;
+      padding: 40px 24px 90px;
     }
 
-    .intro {
-      margin-bottom: 65px;
+    .hero {
+      padding: 40px 0 60px;
     }
 
-    .intro h1 {
-      margin: 0 0 10px;
-      font-size: clamp(32px, 5vw, 58px);
+    .hero-copy {
+      text-align: center;
+      max-width: 620px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(32px, 5vw, 54px);
       font-weight: 600;
-      letter-spacing: -.04em;
+      letter-spacing: -.045em;
+      line-height: 1.1;
     }
 
-    .intro p {
+    .hero p {
       margin: 0;
       color: #666;
-      font-size: 14px;
+      font-size: 15px;
     }
 
-    section { margin-bottom: 80px; }
+    .featured {
+      margin-bottom: 80px;
+    }
 
-    .section-title {
-      font-size: 12px;
-      letter-spacing: .12em;
-      margin-bottom: 22px;
+    .section-heading {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: .15em;
       text-transform: uppercase;
+      margin-bottom: 32px;
+      color: #666;
+    }
+
+    .section-heading span {
+      background: #f5f5f5;
+      padding: 4px 16px;
+      border-radius: 30px;
     }
 
     .products {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 28px 18px;
+      gap: 32px 20px;
+    }
+
+    .product {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: default;
+    }
+
+    .product:hover {
+      transform: translateY(-6px);
     }
 
     .product-image {
       width: 100%;
       aspect-ratio: 1 / 1;
-      background: #f1f1f1;
-      display: grid;
-      place-items: center;
-      color: #999;
-      font-size: 12px;
+      background: #f5f5f5;
       overflow: hidden;
+      border-radius: 12px;
+      position: relative;
     }
 
     .product-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .product:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    .product-image .badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #111;
+      color: #fff;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: .05em;
     }
 
     .product-info {
-      padding-top: 11px;
+      padding-top: 14px;
       display: flex;
       justify-content: space-between;
       align-items: start;
-      gap: 10px;
+      gap: 12px;
     }
 
     .product-name {
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
       line-height: 1.35;
     }
 
     .product-price {
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 600;
       white-space: nowrap;
     }
 
     .add {
-      margin-top: 9px;
-      padding: 0;
+      margin-top: 10px;
+      padding: 6px 0;
       border: 0;
       background: none;
-      text-decoration: underline;
       cursor: pointer;
       font-size: 12px;
+      font-weight: 500;
+      color: #666;
+      transition: color 0.2s;
+      letter-spacing: .02em;
     }
 
-    .add:hover { opacity: .55; }
+    .add:hover {
+      color: #111;
+    }
+
+    .add::before {
+      content: '+ ';
+    }
+
+    /* Catálogo */
+    .catalog {
+      padding-top: 60px;
+      border-top: 1px solid #eee;
+    }
+
+    .catalog-header {
+      padding-bottom: 40px;
+    }
+
+    .catalog-header h2 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 500;
+      letter-spacing: -.04em;
+    }
+
+    .catalog-header p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .filtros {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .filtro-btn {
+      background: #f5f5f5;
+      border: none;
+      padding: 8px 20px;
+      cursor: pointer;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.25s;
+      color: #555;
+    }
+
+    .filtro-btn:hover {
+      background: #e5e5e5;
+    }
+
+    .filtro-btn.active {
+      background: #111;
+      color: #fff;
+    }
 
     /* Carrito */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.18);
+      background: rgba(0, 0, 0, .3);
       z-index: 20;
       display: none;
+      backdrop-filter: blur(4px);
     }
 
-    .overlay.open { display: block; }
+    .overlay.open {
+      display: block;
+    }
 
     .cart {
       position: fixed;
@@ -163,97 +302,233 @@
       background: white;
       z-index: 21;
       transform: translateX(100%);
-      transition: transform .2s ease;
+      transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1);
       border-left: 1px solid #eee;
       display: flex;
       flex-direction: column;
+      box-shadow: -4px 0 20px rgba(0, 0, 0, .05);
     }
 
-    .cart.open { transform: translateX(0); }
+    .cart.open {
+      transform: translateX(0);
+    }
 
     .cart-header {
-      padding: 22px;
+      padding: 22px 24px;
       border-bottom: 1px solid #eee;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-header span {
+      font-size: 16px;
+      font-weight: 600;
     }
 
     .cart-header button {
       border: 0;
       background: none;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 24px;
+      line-height: 1;
+      color: #666;
+      transition: color 0.2s;
+      padding: 0 4px;
+    }
+
+    .cart-header button:hover {
+      color: #111;
     }
 
     #cartItems {
-      padding: 10px 22px;
+      padding: 8px 24px;
       overflow: auto;
       flex: 1;
     }
 
     .cart-item {
-      padding: 15px 0;
-      border-bottom: 1px solid #eee;
+      padding: 16px 0;
+      border-bottom: 1px solid #f5f5f5;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 15px;
-      font-size: 13px;
+      font-size: 14px;
     }
 
-    .cart-item small {
-      display: block;
-      color: #777;
-      margin-top: 4px;
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 500;
+    }
+
+    .cart-item-price {
+      color: #666;
+      font-size: 12px;
+      margin-top: 2px;
     }
 
     .quantity {
-      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f5f5f5;
+      padding: 4px 8px;
+      border-radius: 30px;
     }
 
     .quantity button {
       border: 0;
       background: none;
       cursor: pointer;
-      padding: 0 5px;
+      font-size: 16px;
+      padding: 0 4px;
+      color: #666;
+      transition: color 0.2s;
+      font-weight: 300;
+    }
+
+    .quantity button:hover {
+      color: #111;
+    }
+
+    .quantity span {
+      min-width: 20px;
+      text-align: center;
+      font-weight: 500;
     }
 
     .cart-footer {
       border-top: 1px solid #eee;
-      padding: 22px;
+      padding: 22px 24px;
+      background: #fafafa;
     }
 
     .total {
       display: flex;
       justify-content: space-between;
-      font-size: 14px;
-      margin-bottom: 18px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
     }
 
     .order-button {
       width: 100%;
-      border: 1px solid #111;
+      border: none;
       background: #111;
       color: #fff;
-      padding: 13px;
+      padding: 14px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 30px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .order-button:hover {
+      background: #222;
+    }
+
+    .order-button:active {
+      transform: scale(0.98);
     }
 
     .empty {
-      color: #777;
-      font-size: 13px;
-      padding: 25px 0;
+      color: #999;
+      font-size: 14px;
+      padding: 40px 0;
+      text-align: center;
     }
 
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 13px;
+      z-index: 99;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+      pointer-events: none;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .site-footer {
+      width: 100%;
+      padding: 50px 24px;
+      background: #fafafa;
+      border-top: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .site-footer span {
+      letter-spacing: .05em;
+    }
+
+    /* Responsive */
     @media (max-width: 800px) {
-      .products { grid-template-columns: repeat(2, 1fr); }
-      nav { display: none; }
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px 16px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .topbar {
+        padding: 16px 20px;
+      }
+
+      .cart {
+        width: 100%;
+      }
     }
 
     @media (max-width: 450px) {
-      .products { gap: 24px 12px; }
-      main { padding-left: 16px; padding-right: 16px; }
-      .topbar { padding-left: 16px; padding-right: 16px; }
+      .products {
+        gap: 20px 12px;
+      }
+
+      main {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .topbar {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .product-name {
+        font-size: 13px;
+      }
+
+      .product-price {
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -261,144 +536,123 @@
 <body>
   <header>
     <div class="topbar">
-      <div class="logo">MI TIENDA</div>
+      <div class="logo">✦ UFO STORE</div>
       <nav>
-        <a href="#posters">posters</a>
-        <a href="#stickers">stickers</a>
-        <a href="#chapitas">chapitas</a>
+        <a href="#inicio">inicio</a>
+        <a href="#catalogo">catálogo</a>
       </nav>
-      <button id="cartButton">carrito (<span id="cartCount">0</span>)</button>
+      <button id="cartButton">🛒 <span id="cartCount">0</span></button>
     </div>
   </header>
 
   <main>
-    <div class="intro">
-      <h1>cositas que hice</h1>
-      <p>ilustraciones, stickers y otras cosas.</p>
-    </div>
-
-    <section id="posters">
-      <div class="section-title">posters</div>
-      <div class="products">
-        <article class="product">
-          <div class="product-image">FOTO DEL PRODUCTO</div>
-          <div class="product-info">
-            <div class="product-name">Poster gato espacial</div>
-            <div class="product-price">$5.000</div>
-          </div>
-          <button class="add" data-name="Poster gato espacial" data-price="5000">agregar</button>
-        </article>
-
-        <article class="product">
-          <div class="product-image">FOTO DEL PRODUCTO</div>
-          <div class="product-info">
-            <div class="product-name">Poster personaje</div>
-            <div class="product-price">$5.000</div>
-          </div>
-          <button class="add" data-name="Poster personaje" data-price="5000">agregar</button>
-        </article>
-
-        <article class="product">
-          <div class="product-image">FOTO DEL PRODUCTO</div>
-          <div class="product-info">
-            <div class="product-name">Poster ilustración</div>
-            <div class="product-price">$6.000</div>
-          </div>
-          <button class="add" data-name="Poster ilustración" data-price="6000">agregar</button>
-        </article>
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>productos que me gustan</h1>
+        <p>una selección de mis ilustraciones y productos.</p>
       </div>
     </section>
 
-    <section id="stickers">
-      <div class="section-title">stickers</div>
-      <div class="products">
-        <article class="product">
-          <div class="product-image">FOTO DEL PRODUCTO</div>
-          <div class="product-info">
-            <div class="product-name">Sticker gato</div>
-            <div class="product-price">$2.000</div>
-          </div>
-          <button class="add" data-name="Sticker gato" data-price="2000">agregar</button>
-        </article>
-
-        <article class="product">
-          <div class="product-image">FOTO DEL PRODUCTO</div>
-          <div class="product-info">
-            <div class="product-name">Sticker alien</div>
-            <div class="product-price">$2.000</div>
-          </div>
-          <button class="add" data-name="Sticker alien" data-price="2000">agregar</button>
-        </article>
+    <section id="destacados" class="featured">
+      <div class="section-heading">
+        <span>✦ destacados</span>
       </div>
+      <div class="products featured-products" id="destacadosContainer"></div>
     </section>
 
-    <section id="chapitas">
-      <div class="section-title">chapitas</div>
-      <div class="products">
-        <article class="product">
-          <div class="product-image">FOTO DEL PRODUCTO</div>
-          <div class="product-info">
-            <div class="product-name">Chapita personaje</div>
-            <div class="product-price">$1.500</div>
-          </div>
-          <button class="add" data-name="Chapita personaje" data-price="1500">agregar</button>
-        </article>
-
-        <article class="product">
-          <div class="product-image">FOTO DEL PRODUCTO</div>
-          <div class="product-info">
-            <div class="product-name">Chapita gato</div>
-            <div class="product-price">$1.500</div>
-          </div>
-          <button class="add" data-name="Chapita gato" data-price="1500">agregar</button>
-        </article>
+    <section id="catalogo" class="catalog">
+      <div class="catalog-header">
+        <h2>todos los productos</h2>
+        <p>explora toda la colección</p>
       </div>
+
+      <div class="filtros">
+        <button class="filtro-btn active" data-categoria="todos">todos</button>
+        <button class="filtro-btn" data-categoria="posters">posters</button>
+        <button class="filtro-btn" data-categoria="stickers">stickers</button>
+        <button class="filtro-btn" data-categoria="chapitas">chapitas</button>
+        <button class="filtro-btn" data-categoria="ilustraciones">ilustraciones</button>
+      </div>
+
+      <div class="products" id="catalogoContainer"></div>
     </section>
   </main>
 
+  <!-- Overlay y Carrito -->
   <div class="overlay" id="overlay"></div>
 
   <aside class="cart" id="cart">
     <div class="cart-header">
       <span>tu carrito</span>
-      <button id="closeCart">×</button>
+      <button id="closeCart">✕</button>
     </div>
-
     <div id="cartItems">
       <div class="empty">tu carrito está vacío.</div>
     </div>
-
     <div class="cart-footer">
       <div class="total">
         <span>total</span>
         <strong id="cartTotal">$0</strong>
       </div>
-      <button class="order-button" id="orderButton">enviar pedido</button>
+      <button class="order-button" id="orderButton">enviar pedido por WhatsApp</button>
     </div>
   </aside>
 
+  <footer class="site-footer">
+    <span>@ufoillust · 2026</span>
+  </footer>
+
   <script>
-    const cart = {};
-    const cartButton = document.getElementById("cartButton");
-    const closeCart = document.getElementById("closeCart");
-    const cartPanel = document.getElementById("cart");
-    const overlay = document.getElementById("overlay");
-    const cartItems = document.getElementById("cartItems");
-    const cartCount = document.getElementById("cartCount");
-    const cartTotal = document.getElementById("cartTotal");
+    // ===================== DATOS DE PRODUCTOS =====================
+    const productos = [
+      // Destacados
+      { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/400/400", destacado: true },
+      { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/400/400", destacado: true },
+      { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/400/400", destacado: true },
+      { id: 4, nombre: "Chapita personaje", precio: 1500, categoria: "chapitas", imagen: "https://picsum.photos/seed/chapita/400/400", destacado: true },
+
+      // Posters
+      { id: 5, nombre: "Poster ciudad nocturna", precio: 5500, categoria: "posters", imagen: "https://picsum.photos/seed/ciudad/400/400" },
+      { id: 6, nombre: "Poster espacio profundo", precio: 7000, categoria: "posters", imagen: "https://picsum.photos/seed/espacio/400/400" },
+      { id: 12, nombre: "Poster aurora boreal", precio: 6500, categoria: "posters", imagen: "https://picsum.photos/seed/aurora/400/400" },
+
+      // Stickers
+      { id: 7, nombre: "Sticker alien", precio: 1800, categoria: "stickers", imagen: "https://picsum.photos/seed/alien/400/400" },
+      { id: 8, nombre: "Sticker planeta", precio: 2200, categoria: "stickers", imagen: "https://picsum.photos/seed/planeta/400/400" },
+      { id: 9, nombre: "Sticker cohete", precio: 2500, categoria: "stickers", imagen: "https://picsum.photos/seed/cohete/400/400" },
+      { id: 13, nombre: "Sticker constelación", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/constelacion/400/400" },
+
+      // Chapitas
+      { id: 10, nombre: "Chapita sol", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/sol/400/400" },
+      { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/400/400" },
+      { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/400/400" },
+
+      // Ilustraciones (nueva categoría)
+      { id: 15, nombre: "Ilustración galaxia", precio: 8500, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/galaxia/400/400" },
+      { id: 16, nombre: "Ilustración astronauta", precio: 9000, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/astronauta/400/400" }
+    ];
+
+    // ===================== CARRITO =====================
+    let cart = {};
+
+    // Cargar carrito desde localStorage
+    function loadCart() {
+      const saved = localStorage.getItem('ufoCart');
+      if (saved) {
+        try {
+          cart = JSON.parse(saved);
+        } catch (e) {
+          cart = {};
+        }
+      }
+    }
+
+    function saveCart() {
+      localStorage.setItem('ufoCart', JSON.stringify(cart));
+    }
 
     function money(n) {
       return "$" + n.toLocaleString("es-CL");
-    }
-
-    function openCart() {
-      cartPanel.classList.add("open");
-      overlay.classList.add("open");
-    }
-
-    function closeCartPanel() {
-      cartPanel.classList.remove("open");
-      overlay.classList.remove("open");
     }
 
     function renderCart() {
@@ -411,23 +665,23 @@
         total += item.price * item.quantity;
       });
 
-      cartCount.textContent = count;
-      cartTotal.textContent = money(total);
+      document.getElementById('cartCount').textContent = count;
+      document.getElementById('cartTotal').textContent = money(total);
 
       if (!items.length) {
-        cartItems.innerHTML = '<div class="empty">tu carrito está vacío.</div>';
+        document.getElementById('cartItems').innerHTML = '<div class="empty">tu carrito está vacío.</div>';
         return;
       }
 
-      cartItems.innerHTML = items.map(item => `
+      document.getElementById('cartItems').innerHTML = items.map(item => `
         <div class="cart-item">
-          <div>
-            ${item.name}
-            <small>${money(item.price)} c/u</small>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${money(item.price)} c/u</div>
           </div>
           <div class="quantity">
             <button onclick="changeQuantity('${item.name}', -1)">−</button>
-            ${item.quantity}
+            <span>${item.quantity}</span>
             <button onclick="changeQuantity('${item.name}', 1)">+</button>
           </div>
         </div>
@@ -438,48 +692,152 @@
       if (!cart[name]) return;
       cart[name].quantity += amount;
       if (cart[name].quantity <= 0) delete cart[name];
+      saveCart();
       renderCart();
     }
 
-    document.querySelectorAll(".add").forEach(button => {
-      button.addEventListener("click", () => {
-        const name = button.dataset.name;
-        const price = Number(button.dataset.price);
+    function addToCart(name, price) {
+      if (!cart[name]) {
+        cart[name] = { name, price, quantity: 0 };
+      }
+      cart[name].quantity++;
+      saveCart();
+      renderCart();
+      showToast(`✅ ${name} agregado al carrito`);
+    }
 
-        if (!cart[name]) cart[name] = { name, price, quantity: 0 };
-        cart[name].quantity++;
-        renderCart();
+    // ===================== TOAST =====================
+    function showToast(message) {
+      const existing = document.querySelector('.toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
+    }
+
+    // ===================== RENDERIZAR PRODUCTOS =====================
+    function renderizarProductos(lista, contenedorId, esDestacado = false) {
+      const contenedor = document.getElementById(contenedorId);
+      const filtrados = esDestacado ?
+        lista.filter(p => p.destacado) :
+        lista;
+
+      contenedor.innerHTML = filtrados.map(producto => `
+        <article class="product">
+          <div class="product-image">
+            <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
+            ${producto.destacado ? '<span class="badge">★</span>' : ''}
+          </div>
+          <div class="product-info">
+            <div class="product-name">${producto.nombre}</div>
+            <div class="product-price">${money(producto.precio)}</div>
+          </div>
+          <button class="add" data-id="${producto.id}" data-name="${producto.nombre}" data-price="${producto.precio}">agregar</button>
+        </article>
+      `).join("");
+
+      // Agregar eventos a los botones "agregar"
+      contenedor.querySelectorAll('.add').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const name = this.dataset.name;
+          const price = Number(this.dataset.price);
+          addToCart(name, price);
+        });
       });
-    });
+    }
 
-    cartButton.addEventListener("click", openCart);
-    closeCart.addEventListener("click", closeCartPanel);
-    overlay.addEventListener("click", closeCartPanel);
+    // ===================== FILTROS =====================
+    function setupFilters() {
+      const buttons = document.querySelectorAll('.filtro-btn');
 
-    document.getElementById("orderButton").addEventListener("click", () => {
-      const items = Object.values(cart);
-      if (!items.length) {
-        alert("Tu carrito está vacío.");
-        return;
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Actualizar estado activo
+          buttons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          const categoria = this.dataset.categoria;
+          const filtrados = categoria === 'todos' ?
+            productos :
+            productos.filter(p => p.categoria === categoria);
+
+          renderizarProductos(filtrados, 'catalogoContainer');
+        });
+      });
+    }
+
+    // ===================== CARRITO UI =====================
+    function setupCartUI() {
+      const cartButton = document.getElementById('cartButton');
+      const closeCart = document.getElementById('closeCart');
+      const cartPanel = document.getElementById('cart');
+      const overlay = document.getElementById('overlay');
+
+      function openCart() {
+        cartPanel.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
 
-      const text = items.map(item =>
-        `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}`
-      ).join("\\n");
+      function closeCartPanel() {
+        cartPanel.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
 
-      const total = items.reduce((sum, item) =>
-        sum + item.price * item.quantity, 0
-      );
+      cartButton.addEventListener('click', openCart);
+      closeCart.addEventListener('click', closeCartPanel);
+      overlay.addEventListener('click', closeCartPanel);
 
-      const message =
-        `Hola! Quiero hacer este pedido:\\n\\n${text}\\n\\nTotal: ${money(total)}`;
+      // Cerrar con Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && cartPanel.classList.contains('open')) {
+          closeCartPanel();
+        }
+      });
 
-      // Por ahora muestra el pedido. Después podemos conectarlo
-      // a WhatsApp, correo, formulario o Google Forms.
-      alert(message);
-    });
+      // Botón de pedido
+      document.getElementById('orderButton').addEventListener('click', () => {
+        const items = Object.values(cart);
+        if (!items.length) {
+          showToast('⚠️ Tu carrito está vacío');
+          return;
+        }
 
-    renderCart();
+        const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        let mensaje = "¡Hola! Quiero hacer este pedido:%0A%0A";
+        items.forEach(item => {
+          mensaje += `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}%0A`;
+        });
+        mensaje += `%0ATotal: ${money(total)}%0A%0AGracias!`;
+
+        // Cambia este número por el tuyo (formato: código país + número sin +)
+        const telefono = "56912345678";
+        const url = `https://wa.me/${telefono}?text=${mensaje}`;
+
+        window.open(url, '_blank');
+      });
+    }
+
+    // ===================== INICIALIZACIÓN =====================
+    function init() {
+      loadCart();
+      renderizarProductos(productos, 'destacadosContainer', true);
+      renderizarProductos(productos, 'catalogoContainer');
+      setupFilters();
+      setupCartUI();
+      renderCart();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
