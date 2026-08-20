@@ -1294,12 +1294,12 @@
       },
       { 
         id: 18, 
-        nombre: "Sticker Juddy Hopps", 
+        nombre: "Sticker Judy Hopps", 
         precio: 800, 
         categoria: "stickers", 
-        imagen: "img/sticker-juddy-hopps.png", 
+        imagen: "img/sticker-judy-hopps.png", 
         destacado: false, 
-        descripcion: "Sticker de Juddy Hopps, diseño adorable y resistente." 
+        descripcion: "Sticker de Judy Hopps, diseño adorable y resistente." 
       },
       { 
         id: 19, 
@@ -1445,7 +1445,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-toriel.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Toriel. Metal resistente con cierre de seguridad." 
+        descripcion: "Chapita de 37mm con diseño de Toriel. Metal resistente con cierre de seguridad.",
+        color: "#FEC200" 
       },
       { 
         id: 35, 
@@ -1454,7 +1455,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-asgore.png", 
         destacado: true, 
-        descripcion: "Chapita de 37mm con diseño de Asgore. Ideal para mochilas, chaquetas o gorras." 
+        descripcion: "Chapita de 37mm con diseño de Asgore. Ideal para mochilas, chaquetas o gorras.",
+        color: "#FEC200" 
       },
       { 
         id: 36, 
@@ -1463,7 +1465,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-von-lycaon-37mm.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Von Lycaon. Metal de alta calidad." 
+        descripcion: "Chapita de 37mm con diseño de Von Lycaon. Metal de alta calidad.",
+        color: "#38358C" 
       },
       { 
         id: 37, 
@@ -1472,7 +1475,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-ben-bigger.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Ben Bigger. Resistente y duradera." 
+        descripcion: "Chapita de 37mm con diseño de Ben Bigger. Resistente y duradera.",
+        color: "#C30B00" 
       },
       { 
         id: 38, 
@@ -1481,7 +1485,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-pan-yinhu.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Pan Yinhu. Perfecta para tu colección." 
+        descripcion: "Chapita de 37mm con diseño de Pan Yinhu. Perfecta para tu colección.",
+        color: "#72790F" 
       },
       { 
         id: 39, 
@@ -1490,7 +1495,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-roxy.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Roxy. Ideal para mochilas y chaquetas." 
+        descripcion: "Chapita de 37mm con diseño de Roxy. Ideal para mochilas y chaquetas.",
+        color: "#760BE7" 
       },
       { 
         id: 40, 
@@ -1499,7 +1505,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-glamrock-chica.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Glamrock Chica. Metal resistente." 
+        descripcion: "Chapita de 37mm con diseño de Glamrock Chica. Metal resistente.",
+        color: "#FF8BEC" 
       },
       { 
         id: 41, 
@@ -1508,16 +1515,18 @@
         categoria: "chapitas", 
         imagen: "img/chapita-monty.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Monty. Cierre de seguridad incluido." 
+        descripcion: "Chapita de 37mm con diseño de Monty. Cierre de seguridad incluido.",
+        color: "#8508BC" 
       },
       { 
         id: 42, 
-        nombre: "Chapita Juddy Hopps", 
+        nombre: "Chapita Judy Hopps", 
         precio: 1500, 
         categoria: "chapitas", 
-        imagen: "img/chapita-juddy-hopps.png", 
+        imagen: "img/chapita-judy-hopps.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Juddy Hopps. Ideal para fans de Zootopia." 
+        descripcion: "Chapita de 37mm con diseño de Judy Hopps. Ideal para fans de Zootopia.",
+        color: "#FE6730" 
       },
       { 
         id: 43, 
@@ -1526,7 +1535,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-nick-wilde.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Nick Wilde. Metal de alta calidad." 
+        descripcion: "Chapita de 37mm con diseño de Nick Wilde. Metal de alta calidad.",
+        color: "#7D58FE" 
       },
       { 
         id: 44, 
@@ -1535,7 +1545,8 @@
         categoria: "chapitas", 
         imagen: "img/chapita-juan-carlos-bodoque.png", 
         destacado: false, 
-        descripcion: "Chapita de 37mm con diseño de Juan Carlos Bodoque. Ideal para fans de 31 Minutos." 
+        descripcion: "Chapita de 37mm con diseño de Juan Carlos Bodoque. Ideal para fans de 31 Minutos.",
+        color: "#FFDD00" 
       },
 
       // ==================== CHAPITAS 58mm (5) ====================
@@ -1673,6 +1684,13 @@
         modalWrapper.classList.add('sticker');
       } else if (producto.categoria === 'chapitas') {
         modalWrapper.classList.add('chapitas');
+      }
+      
+      // Aplicar color de fondo a chapitas 37mm si tienen color definido
+      if (producto.categoria === 'chapitas' && producto.color) {
+        modalImage.style.backgroundColor = producto.color;
+      } else {
+        modalImage.style.backgroundColor = 'transparent';
       }
       
       modalImage.src = producto.imagen;
@@ -1833,10 +1851,15 @@
       
       const filtrados = esDestacado ? lista.filter(p => p.destacado) : lista;
       
-      contenedor.innerHTML = filtrados.map(producto => `
+      contenedor.innerHTML = filtrados.map(producto => {
+        // Determinar si es chapita 37mm con color
+        const isChapitaConColor = producto.categoria === 'chapitas' && producto.color;
+        const bgColor = isChapitaConColor ? producto.color : 'transparent';
+        
+        return `
         <article class="product" data-id="${producto.id}">
           <div class="product-image ${producto.categoria}" data-id="${producto.id}">
-            <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
+            <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" style="${isChapitaConColor ? 'background-color: ' + bgColor + ';' : ''}">
             ${producto.destacado ? '<span class="badge">★</span>' : ''}
           </div>
           <div class="product-info">
@@ -1845,7 +1868,7 @@
           </div>
           <button class="add" data-id="${producto.id}" data-name="${producto.nombre}" data-price="${producto.precio}">agregar</button>
         </article>
-      `).join("");
+      `}).join("");
 
       contenedor.querySelectorAll('.product-image').forEach(img => {
         img.addEventListener('click', function() {
