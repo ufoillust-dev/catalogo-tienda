@@ -301,7 +301,7 @@
       content: '+ ';
     }
 
-    /* ===== MODAL - FONDO TRANSPARENTE ===== */
+    /* ===== MODAL ===== */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -319,17 +319,24 @@
       display: flex;
     }
 
+    /* ===== OCULTAR SCROLLBAR DEL MODAL ===== */
     .modal-content {
       background: white;
       max-width: 650px;
       width: 100%;
       border-radius: 20px;
-      overflow: hidden;
-      max-height: 90vh;
       overflow-y: auto;
+      max-height: 90vh;
       position: relative;
       box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
       animation: modalFadeIn 0.3s ease;
+      /* Ocultar scrollbar */
+      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none;  /* IE y Edge */
+    }
+
+    .modal-content::-webkit-scrollbar {
+      display: none;  /* Chrome, Safari y Opera */
     }
 
     @keyframes modalFadeIn {
@@ -461,7 +468,7 @@
       border-color: #bbb;
     }
 
-    /* ===== ZOOM FLOTANTE - FONDO TRANSPARENTE ===== */
+    /* ===== ZOOM FLOTANTE ===== */
     .zoom-overlay {
       position: fixed;
       inset: 0;
