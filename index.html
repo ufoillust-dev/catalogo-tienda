@@ -181,6 +181,7 @@
       overflow: hidden;
       border-radius: 12px;
       position: relative;
+      cursor: pointer;  /* <-- NUEVO: indica que es clickeable */
     }
 
     .product-image img {
@@ -204,6 +205,7 @@
       padding: 4px 10px;
       border-radius: 20px;
       letter-spacing: .05em;
+      pointer-events: none;  /* <-- NUEVO: evita que el badge interfiera con el click */
     }
 
     .product-info {
@@ -246,6 +248,139 @@
     .add::before {
       content: '+ ';
     }
+
+    /* ===== MODAL DE PRODUCTO ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .85);
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      max-height: 50vh;
+      object-fit: contain;
+      background: #f5f5f5;
+      display: block;
+    }
+
+    .modal-body {
+      padding: 28px 30px 30px;
+    }
+
+    .modal-body h2 {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      letter-spacing: -.02em;
+    }
+
+    .modal-body .modal-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 14px;
+    }
+
+    .modal-body .modal-categoria {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #888;
+      background: #f5f5f5;
+      padding: 4px 14px;
+      border-radius: 30px;
+      margin-bottom: 16px;
+    }
+
+    .modal-body p {
+      color: #555;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .modal-buttons .add-modal {
+      flex: 1;
+      padding: 12px 24px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-width: 120px;
+    }
+
+    .modal-buttons .add-modal:hover {
+      background: #222;
+    }
+
+    .modal-buttons .close-modal {
+      padding: 12px 28px;
+      background: transparent;
+      color: #666;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-buttons .close-modal:hover {
+      background: #f5f5f5;
+      border-color: #bbb;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ===== FIN MODAL ===== */
 
     /* Catálogo - Página separada */
     .catalog-page {
@@ -586,6 +721,19 @@
       .cart {
         width: 100%;
       }
+
+      .modal-content {
+        max-width: 95%;
+        margin: 10px;
+      }
+
+      .modal-body {
+        padding: 20px;
+      }
+
+      .modal-body h2 {
+        font-size: 18px;
+      }
     }
 
     @media (max-width: 450px) {
@@ -609,6 +757,16 @@
 
       .product-price {
         font-size: 13px;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .modal-buttons .add-modal,
+      .modal-buttons .close-modal {
+        width: 100%;
+        text-align: center;
       }
     }
   </style>
@@ -665,6 +823,24 @@
     </div>
   </main>
 
+  <!-- ===== MODAL DE PRODUCTO ===== -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="">
+      <div class="modal-body">
+        <span class="modal-categoria" id="modalCategoria">categoría</span>
+        <h2 id="modalName">Nombre del producto</h2>
+        <div class="modal-price" id="modalPrice">$0</div>
+        <p id="modalDescription">Descripción del producto.</p>
+        <div class="modal-buttons">
+          <button class="add-modal" id="modalAddButton">+ agregar al carrito</button>
+          <button class="close-modal" id="modalCloseButton">cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ===== FIN MODAL ===== -->
+
   <div class="overlay" id="overlay"></div>
 
   <aside class="cart" id="cart">
@@ -701,26 +877,26 @@
     // ===================== DATOS DE PRODUCTOS =====================
     const productos = [
       // Destacados
-      { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/400/400", destacado: true },
-      { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/400/400", destacado: true },
-      { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/400/400", destacado: true },
-      { id: 4, nombre: "Chapita personaje", precio: 1500, categoria: "chapitas", imagen: "https://picsum.photos/seed/chapita/400/400", destacado: true },
+      { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/600/600", destacado: true, descripcion: "Poster de alta calidad con ilustración de un gato en el espacio. Perfecto para decorar tu habitación." },
+      { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/600/600", destacado: true, descripcion: "Sticker vinílico de gato, resistente al agua. Ideal para laptops, libretas o donde quieras." },
+      { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/600/600", destacado: true, descripcion: "Ilustración original impresa en papel de alta calidad. Medidas 30x40 cm." },
+      { id: 4, nombre: "Chapita personaje", precio: 1500, categoria: "chapitas", imagen: "https://picsum.photos/seed/chapita/600/600", destacado: true, descripcion: "Chapita de metal con diseño de personaje. Ideal para mochilas, chaquetas o gorras." },
 
       // Posters
-      { id: 5, nombre: "Poster ciudad nocturna", precio: 5500, categoria: "posters", imagen: "https://picsum.photos/seed/ciudad/400/400" },
-      { id: 6, nombre: "Poster espacio profundo", precio: 7000, categoria: "posters", imagen: "https://picsum.photos/seed/espacio/400/400" },
-      { id: 12, nombre: "Poster aurora boreal", precio: 6500, categoria: "posters", imagen: "https://picsum.photos/seed/aurora/400/400" },
+      { id: 5, nombre: "Poster ciudad nocturna", precio: 5500, categoria: "posters", imagen: "https://picsum.photos/seed/ciudad/600/600", descripcion: "Vista nocturna de una ciudad futurista. Poster en papel mate de 30x40 cm." },
+      { id: 6, nombre: "Poster espacio profundo", precio: 7000, categoria: "posters", imagen: "https://picsum.photos/seed/espacio/600/600", descripcion: "Explora el universo con este poster de espacio profundo. Detalles increíbles." },
+      { id: 12, nombre: "Poster aurora boreal", precio: 6500, categoria: "posters", imagen: "https://picsum.photos/seed/aurora/600/600", descripcion: "Captura la magia de la aurora boreal en tu pared. Colores vibrantes." },
 
       // Stickers
-      { id: 7, nombre: "Sticker alien", precio: 1800, categoria: "stickers", imagen: "https://picsum.photos/seed/alien/400/400" },
-      { id: 8, nombre: "Sticker planeta", precio: 2200, categoria: "stickers", imagen: "https://picsum.photos/seed/planeta/400/400" },
-      { id: 9, nombre: "Sticker cohete", precio: 2500, categoria: "stickers", imagen: "https://picsum.photos/seed/cohete/400/400" },
-      { id: 13, nombre: "Sticker constelación", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/constelacion/400/400" },
+      { id: 7, nombre: "Sticker alien", precio: 1800, categoria: "stickers", imagen: "https://picsum.photos/seed/alien/600/600", descripcion: "Sticker de alienígena, perfecto para los amantes del espacio y lo extraterrestre." },
+      { id: 8, nombre: "Sticker planeta", precio: 2200, categoria: "stickers", imagen: "https://picsum.photos/seed/planeta/600/600", descripcion: "Sticker de planeta con diseño detallado. Resistente al agua y al sol." },
+      { id: 9, nombre: "Sticker cohete", precio: 2500, categoria: "stickers", imagen: "https://picsum.photos/seed/cohete/600/600", descripcion: "Sticker de cohete espacial, ideal para decorar tu laptop o cuaderno." },
+      { id: 13, nombre: "Sticker constelación", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/constelacion/600/600", descripcion: "Sticker de constelación con estrellas brillantes. Perfecto para un toque cósmico." },
 
       // Chapitas
-      { id: 10, nombre: "Chapita sol", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/sol/400/400" },
-      { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/400/400" },
-      { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/400/400" }
+      { id: 10, nombre: "Chapita sol", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/sol/600/600", descripcion: "Chapita con diseño del sol. Metal resistente con cierre de seguridad." },
+      { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/600/600", descripcion: "Chapita con diseño de luna. Perfecta para tu chaqueta o mochila." },
+      { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/600/600", descripcion: "Chapita de estrella fugaz. Ideal para darle un toque especial a tus accesorios." }
     ];
 
     // ===================== CARRITO =====================
@@ -792,12 +968,35 @@
       setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2000);
     }
 
+    // ===================== MODAL =====================
+    let currentProductId = null;
+
+    function openModal(producto) {
+      currentProductId = producto.id;
+      document.getElementById('modalImage').src = producto.imagen;
+      document.getElementById('modalImage').alt = producto.nombre;
+      document.getElementById('modalName').textContent = producto.nombre;
+      document.getElementById('modalPrice').textContent = money(producto.precio);
+      document.getElementById('modalCategoria').textContent = producto.categoria;
+      document.getElementById('modalDescription').textContent = producto.descripcion || 'Sin descripción disponible.';
+      document.getElementById('productModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('productModal').classList.remove('open');
+      document.body.style.overflow = '';
+      currentProductId = null;
+    }
+
+    // ===================== RENDERIZAR PRODUCTOS =====================
     function renderizarProductos(lista, contenedorId, esDestacado = false) {
       const contenedor = document.getElementById(contenedorId);
       const filtrados = esDestacado ? lista.filter(p => p.destacado) : lista;
+      
       contenedor.innerHTML = filtrados.map(producto => `
-        <article class="product">
-          <div class="product-image">
+        <article class="product" data-id="${producto.id}">
+          <div class="product-image" data-id="${producto.id}">
             <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
             ${producto.destacado ? '<span class="badge">★</span>' : ''}
           </div>
@@ -808,8 +1007,20 @@
           <button class="add" data-id="${producto.id}" data-name="${producto.nombre}" data-price="${producto.precio}">agregar</button>
         </article>
       `).join("");
+
+      // Evento para abrir modal al hacer clic en la imagen
+      contenedor.querySelectorAll('.product-image').forEach(img => {
+        img.addEventListener('click', function() {
+          const id = parseInt(this.dataset.id);
+          const producto = productos.find(p => p.id === id);
+          if (producto) openModal(producto);
+        });
+      });
+
+      // Evento para agregar al carrito
       contenedor.querySelectorAll('.add').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation(); // Evita que se abra el modal
           const name = this.dataset.name;
           const price = Number(this.dataset.price);
           addToCart(name, price);
@@ -817,6 +1028,7 @@
       });
     }
 
+    // ===================== FILTROS =====================
     function setupFilters() {
       const buttons = document.querySelectorAll('.filtro-btn');
       buttons.forEach(btn => {
@@ -830,6 +1042,7 @@
       });
     }
 
+    // ===================== NAVEGACIÓN =====================
     function setupNavigation() {
       const paginaInicio = document.getElementById('paginaInicio');
       const paginaCatalogo = document.getElementById('paginaCatalogo');
@@ -855,6 +1068,7 @@
       mostrarInicio();
     }
 
+    // ===================== CARRITO UI =====================
     function setupCartUI() {
       const cartButton = document.getElementById('cartButton');
       const closeCart = document.getElementById('closeCart');
@@ -881,69 +1095,14 @@
       overlay.addEventListener('click', closeCartPanel);
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && cartPanel.classList.contains('open')) {
-          closeCartPanel();
+        if (e.key === 'Escape') {
+          if (document.getElementById('productModal').classList.contains('open')) {
+            closeModal();
+          } else if (cartPanel.classList.contains('open')) {
+            closeCartPanel();
+          }
         }
       });
 
-      function validarFormulario() {
-        const nombre = nombreInput.value.trim();
-        const email = emailInput.value.trim();
-        const items = Object.values(cart);
-        if (nombre && email && items.length > 0) {
-          orderButton.disabled = false;
-        } else {
-          orderButton.disabled = true;
-        }
-      }
-
-      nombreInput.addEventListener('input', validarFormulario);
-      emailInput.addEventListener('input', validarFormulario);
-
-      orderButton.addEventListener('click', () => {
-        const items = Object.values(cart);
-        const nombre = nombreInput.value.trim();
-        const email = emailInput.value.trim();
-
-        if (!items.length) {
-          showToast('⚠️ Tu carrito está vacío');
-          return;
-        }
-        if (!nombre || !email) {
-          showToast('⚠️ Por favor completa tu nombre y correo');
-          return;
-        }
-
-        const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        let subject = `Nuevo pedido de ${nombre} - UFO STORE`;
-        let body = `DATOS DEL CLIENTE:\nNombre: ${nombre}\nCorreo: ${email}\n\nDETALLE DEL PEDIDO:\n`;
-        items.forEach(item => {
-          body += `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}\n`;
-        });
-        body += `\nTotal: ${money(total)}\n\nMuchas gracias por tu pedido!`;
-
-        const emailDestino = "ufoillust@gmail.com";
-        const mailtoLink = `mailto:${emailDestino}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-        window.open(mailtoLink, '_blank');
-        showToast('📧 Pedido enviado por correo');
-        setTimeout(() => closeCartPanel(), 500);
-      });
-
-      validarFormulario();
-    }
-
-    function init() {
-      loadCart();
-      renderizarProductos(productos, 'destacadosContainer', true);
-      renderizarProductos(productos, 'catalogoContainer');
-      setupFilters();
-      setupNavigation();
-      setupCartUI();
-      renderCart();
-    }
-
-    document.addEventListener('DOMContentLoaded', init);
-  </script>
-</body>
-</html>
+      // Cerrar modal con clic en overlay
+      document.getElementById('productModal').addEventListener('click', function(e)
