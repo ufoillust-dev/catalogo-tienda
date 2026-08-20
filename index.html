@@ -260,6 +260,11 @@
       z-index: 2;
     }
 
+    /* ===== SOMBRA PARA STICKERS EN CATÁLOGO ===== */
+    .product-image.sticker img {
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+    }
+
     .product-info {
       padding-top: 14px;
       display: flex;
@@ -381,6 +386,11 @@
       max-width: 100%;
       aspect-ratio: 1 / 1.414;
       object-fit: contain;
+    }
+
+    /* ===== SOMBRA PARA STICKERS EN EL MODAL ===== */
+    .modal-image-wrapper.sticker img {
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
     }
 
     @media (pointer: fine) {
@@ -1079,7 +1089,7 @@
       { 
         id: 3, 
         nombre: "Poster Doughberman", 
-        precio: 5000,  // ✅ CORREGIDO: 5.000
+        precio: 5000,
         categoria: "posters", 
         imagen: "img/poster-doughberman.jpg", 
         destacado: false, 
@@ -1586,10 +1596,12 @@
       const modalImage = document.getElementById('modalImage');
       const modalWrapper = document.getElementById('modalImageWrapper');
       
-      modalWrapper.classList.remove('poster');
+      modalWrapper.classList.remove('poster', 'sticker');
       
       if (producto.categoria === 'posters') {
         modalWrapper.classList.add('poster');
+      } else if (producto.categoria === 'stickers') {
+        modalWrapper.classList.add('sticker');
       }
       
       modalImage.src = producto.imagen;
@@ -1748,7 +1760,7 @@
       
       contenedor.innerHTML = filtrados.map(producto => `
         <article class="product" data-id="${producto.id}">
-          <div class="product-image" data-id="${producto.id}">
+          <div class="product-image ${producto.categoria}" data-id="${producto.id}">
             <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
             ${producto.destacado ? '<span class="badge">★</span>' : ''}
           </div>
