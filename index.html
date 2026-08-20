@@ -225,7 +225,7 @@
       transform: translateY(-6px);
     }
 
-    /* ===== IMAGEN CON EFECTO LUPA ===== */
+    /* ===== IMAGEN CON CURSOR DE LUPA ===== */
     .product-image {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -233,7 +233,7 @@
       overflow: hidden;
       border-radius: 12px;
       position: relative;
-      cursor: pointer;
+      cursor: zoom-in;  /* <-- CURSOR DE LUPA */
     }
 
     .product-image img {
@@ -243,33 +243,22 @@
       transition: transform 0.4s ease;
     }
 
-    /* Efecto hover en PC - zoom y lupa */
-    .product-image .zoom-icon {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      border-radius: 12px;
-      pointer-events: none;
-    }
-
-    .product-image .zoom-icon svg {
-      width: 48px;
-      height: 48px;
-      fill: white;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
-    }
-
-    .product-image:hover .zoom-icon {
-      opacity: 1;
-    }
-
     .product-image:hover img {
-      transform: scale(1.08);
+      transform: scale(1.05);
+    }
+
+    .product-image .badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #111;
+      color: #fff;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: .05em;
+      pointer-events: none;
+      z-index: 2;
     }
 
     /* En móvil: indicador táctil */
@@ -295,26 +284,10 @@
       .product-image .tap-indicator {
         opacity: 1;
       }
-      .product-image .zoom-icon {
-        display: none;
+      .product-image {
+        cursor: pointer;
       }
     }
-
-    .product-image .badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #111;
-      color: #fff;
-      font-size: 10px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      letter-spacing: .05em;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    /* ===== FIN EFECTO LUPA ===== */
 
     .product-info {
       padding-top: 14px;
@@ -1084,12 +1057,6 @@
         <article class="product" data-id="${producto.id}">
           <div class="product-image" data-id="${producto.id}">
             <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
-            <div class="zoom-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                <path d="M0 0h24v24H0z" fill="none"/>
-              </svg>
-            </div>
             <span class="tap-indicator">👆 tocar para ver</span>
             ${producto.destacado ? '<span class="badge">★</span>' : ''}
           </div>
