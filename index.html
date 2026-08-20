@@ -38,18 +38,33 @@
       gap: 24px;
     }
 
-    /* ===== LOGO ===== */
+    /* ===== LOGO - VISIBLE EN DESKTOP Y MÓVIL ===== */
     .logo {
       display: flex;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .logo img {
-      height: 40px;
+      height: 45px;
       width: auto;
+      min-width: 45px;     /* ANCHO MÍNIMO para que no desaparezca */
+      max-width: 180px;    /* ANCHO MÁXIMO */
       display: block;
     }
 
+    /* FORZAR VISIBILIDAD EN MÓVIL */
+    @media (max-width: 600px) {
+      .logo img {
+        height: 50px !important;
+        min-width: 50px !important;
+        width: auto !important;
+      }
+      
+      .topbar {
+        padding: 12px 16px;
+      }
+    }
     /* ===== FIN LOGO ===== */
 
     nav {
@@ -92,6 +107,7 @@
       padding: 8px 16px;
       border-radius: 30px;
       transition: background 0.2s;
+      flex-shrink: 0;
     }
 
     #cartButton:hover {
@@ -513,7 +529,6 @@
       text-align: center;
     }
 
-    /* Toast notification */
     .toast {
       position: fixed;
       bottom: 30px;
@@ -606,7 +621,6 @@
 <body>
   <header>
     <div class="topbar">
-      <!-- LOGO: SOLO LA IMAGEN SVG -->
       <div class="logo">
         <img src="logo.svg" alt="UFO STORE">
       </div>
@@ -620,7 +634,6 @@
   </header>
 
   <main>
-    <!-- PÁGINA DE INICIO -->
     <div id="paginaInicio">
       <section class="hero">
         <div class="hero-copy">
@@ -637,7 +650,6 @@
       </section>
     </div>
 
-    <!-- PÁGINA DE CATÁLOGO -->
     <div id="paginaCatalogo" class="catalog-page">
       <a class="back-link" id="volverInicio">volver al inicio</a>
       
@@ -658,7 +670,6 @@
     </div>
   </main>
 
-  <!-- Overlay y Carrito -->
   <div class="overlay" id="overlay"></div>
 
   <aside class="cart" id="cart">
@@ -670,7 +681,6 @@
       <div class="empty">tu carrito está vacío.</div>
     </div>
 
-    <!-- Formulario de datos del cliente -->
     <div class="cliente-form">
       <label for="nombreCliente">tu nombre</label>
       <input type="text" id="nombreCliente" placeholder="ej: María González" required>
@@ -693,46 +703,31 @@
   </footer>
 
   <script>
-    // ===================== DATOS DE PRODUCTOS =====================
     const productos = [
-      // Destacados
       { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/400/400", destacado: true },
       { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/400/400", destacado: true },
       { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/400/400", destacado: true },
       { id: 4, nombre: "Chapita personaje", precio: 1500, categoria: "chapitas", imagen: "https://picsum.photos/seed/chapita/400/400", destacado: true },
-
-      // Posters
       { id: 5, nombre: "Poster ciudad nocturna", precio: 5500, categoria: "posters", imagen: "https://picsum.photos/seed/ciudad/400/400" },
       { id: 6, nombre: "Poster espacio profundo", precio: 7000, categoria: "posters", imagen: "https://picsum.photos/seed/espacio/400/400" },
       { id: 12, nombre: "Poster aurora boreal", precio: 6500, categoria: "posters", imagen: "https://picsum.photos/seed/aurora/400/400" },
-
-      // Stickers
       { id: 7, nombre: "Sticker alien", precio: 1800, categoria: "stickers", imagen: "https://picsum.photos/seed/alien/400/400" },
       { id: 8, nombre: "Sticker planeta", precio: 2200, categoria: "stickers", imagen: "https://picsum.photos/seed/planeta/400/400" },
       { id: 9, nombre: "Sticker cohete", precio: 2500, categoria: "stickers", imagen: "https://picsum.photos/seed/cohete/400/400" },
       { id: 13, nombre: "Sticker constelación", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/constelacion/400/400" },
-
-      // Chapitas
       { id: 10, nombre: "Chapita sol", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/sol/400/400" },
       { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/400/400" },
       { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/400/400" },
-
-      // Ilustraciones
       { id: 15, nombre: "Ilustración galaxia", precio: 8500, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/galaxia/400/400" },
       { id: 16, nombre: "Ilustración astronauta", precio: 9000, categoria: "ilustraciones", imagen: "https://picsum.photos/seed/astronauta/400/400" }
     ];
 
-    // ===================== CARRITO =====================
     let cart = {};
 
     function loadCart() {
       const saved = localStorage.getItem('ufoCart');
       if (saved) {
-        try {
-          cart = JSON.parse(saved);
-        } catch (e) {
-          cart = {};
-        }
+        try { cart = JSON.parse(saved); } catch (e) { cart = {}; }
       }
     }
 
@@ -746,22 +741,14 @@
 
     function renderCart() {
       const items = Object.values(cart);
-      let count = 0;
-      let total = 0;
-
-      items.forEach(item => {
-        count += item.quantity;
-        total += item.price * item.quantity;
-      });
-
+      let count = 0, total = 0;
+      items.forEach(item => { count += item.quantity; total += item.price * item.quantity; });
       document.getElementById('cartCount').textContent = count;
       document.getElementById('cartTotal').textContent = money(total);
-
       if (!items.length) {
         document.getElementById('cartItems').innerHTML = '<div class="empty">tu carrito está vacío.</div>';
         return;
       }
-
       document.getElementById('cartItems').innerHTML = items.map(item => `
         <div class="cart-item">
           <div class="cart-item-info">
@@ -786,39 +773,26 @@
     }
 
     function addToCart(name, price) {
-      if (!cart[name]) {
-        cart[name] = { name, price, quantity: 0 };
-      }
+      if (!cart[name]) cart[name] = { name, price, quantity: 0 };
       cart[name].quantity++;
       saveCart();
       renderCart();
       showToast(`✅ ${name} agregado al carrito`);
     }
 
-    // ===================== TOAST =====================
     function showToast(message) {
       const existing = document.querySelector('.toast');
       if (existing) existing.remove();
-
       const toast = document.createElement('div');
       toast.className = 'toast';
       toast.textContent = message;
       document.body.appendChild(toast);
-
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s';
-        setTimeout(() => toast.remove(), 300);
-      }, 2000);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2000);
     }
 
-    // ===================== RENDERIZAR PRODUCTOS =====================
     function renderizarProductos(lista, contenedorId, esDestacado = false) {
       const contenedor = document.getElementById(contenedorId);
-      const filtrados = esDestacado ?
-        lista.filter(p => p.destacado) :
-        lista;
-
+      const filtrados = esDestacado ? lista.filter(p => p.destacado) : lista;
       contenedor.innerHTML = filtrados.map(producto => `
         <article class="product">
           <div class="product-image">
@@ -832,7 +806,6 @@
           <button class="add" data-id="${producto.id}" data-name="${producto.nombre}" data-price="${producto.precio}">agregar</button>
         </article>
       `).join("");
-
       contenedor.querySelectorAll('.add').forEach(btn => {
         btn.addEventListener('click', function() {
           const name = this.dataset.name;
@@ -842,26 +815,19 @@
       });
     }
 
-    // ===================== FILTROS =====================
     function setupFilters() {
       const buttons = document.querySelectorAll('.filtro-btn');
-
       buttons.forEach(btn => {
         btn.addEventListener('click', function() {
           buttons.forEach(b => b.classList.remove('active'));
           this.classList.add('active');
-
           const categoria = this.dataset.categoria;
-          const filtrados = categoria === 'todos' ?
-            productos :
-            productos.filter(p => p.categoria === categoria);
-
+          const filtrados = categoria === 'todos' ? productos : productos.filter(p => p.categoria === categoria);
           renderizarProductos(filtrados, 'catalogoContainer');
         });
       });
     }
 
-    // ===================== NAVEGACIÓN =====================
     function setupNavigation() {
       const paginaInicio = document.getElementById('paginaInicio');
       const paginaCatalogo = document.getElementById('paginaCatalogo');
@@ -884,11 +850,9 @@
       navInicio.addEventListener('click', mostrarInicio);
       navCatalogo.addEventListener('click', mostrarCatalogo);
       volverInicio.addEventListener('click', mostrarInicio);
-
       mostrarInicio();
     }
 
-    // ===================== CARRITO UI =====================
     function setupCartUI() {
       const cartButton = document.getElementById('cartButton');
       const closeCart = document.getElementById('closeCart');
@@ -920,12 +884,10 @@
         }
       });
 
-      // Validar campos del formulario en tiempo real
       function validarFormulario() {
         const nombre = nombreInput.value.trim();
         const email = emailInput.value.trim();
         const items = Object.values(cart);
-        
         if (nombre && email && items.length > 0) {
           orderButton.disabled = false;
         } else {
@@ -936,7 +898,6 @@
       nombreInput.addEventListener('input', validarFormulario);
       emailInput.addEventListener('input', validarFormulario);
 
-      // ===================== ENVIAR POR CORREO =====================
       orderButton.addEventListener('click', () => {
         const items = Object.values(cart);
         const nombre = nombreInput.value.trim();
@@ -946,42 +907,30 @@
           showToast('⚠️ Tu carrito está vacío');
           return;
         }
-
         if (!nombre || !email) {
           showToast('⚠️ Por favor completa tu nombre y correo');
           return;
         }
 
         const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        
         let subject = `Nuevo pedido de ${nombre} - UFO STORE`;
-        let body = `DATOS DEL CLIENTE:\n`;
-        body += `Nombre: ${nombre}\n`;
-        body += `Correo: ${email}\n\n`;
-        body += `DETALLE DEL PEDIDO:\n`;
-        
+        let body = `DATOS DEL CLIENTE:\nNombre: ${nombre}\nCorreo: ${email}\n\nDETALLE DEL PEDIDO:\n`;
         items.forEach(item => {
           body += `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}\n`;
         });
-        body += `\nTotal: ${money(total)}\n\n`;
-        body += `Muchas gracias por tu pedido!`;
+        body += `\nTotal: ${money(total)}\n\nMuchas gracias por tu pedido!`;
 
         const emailDestino = "ufoillust@gmail.com";
         const mailtoLink = `mailto:${emailDestino}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
         window.open(mailtoLink, '_blank');
-        
         showToast('📧 Pedido enviado por correo');
-        
-        setTimeout(() => {
-          closeCartPanel();
-        }, 500);
+        setTimeout(() => closeCartPanel(), 500);
       });
 
       validarFormulario();
     }
 
-    // ===================== INICIALIZACIÓN =====================
     function init() {
       loadCart();
       renderizarProductos(productos, 'destacadosContainer', true);
