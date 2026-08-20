@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UFO STORE - Catálogo Online</title>
+  
   <style>
     * {
       box-sizing: border-box;
@@ -37,14 +38,19 @@
       gap: 24px;
     }
 
+    /* ===== LOGO ===== */
     .logo {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      background: linear-gradient(135deg, #111 0%, #444 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
     }
+
+    .logo img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    /* ===== FIN LOGO ===== */
 
     nav {
       display: flex;
@@ -424,9 +430,45 @@
       font-weight: 500;
     }
 
+    /* Formulario de cliente */
+    .cliente-form {
+      padding: 16px 24px;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+    }
+
+    .cliente-form label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #555;
+      letter-spacing: .05em;
+    }
+
+    .cliente-form input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+      background: white;
+    }
+
+    .cliente-form input:focus {
+      outline: none;
+      border-color: #111;
+    }
+
+    .cliente-form input::placeholder {
+      color: #aaa;
+    }
+
     .cart-footer {
       border-top: 1px solid #eee;
-      padding: 22px 24px;
+      padding: 16px 24px 22px;
       background: #fafafa;
     }
 
@@ -457,6 +499,11 @@
 
     .order-button:active {
       transform: scale(0.98);
+    }
+
+    .order-button:disabled {
+      background: #999;
+      cursor: not-allowed;
     }
 
     .empty {
@@ -559,7 +606,11 @@
 <body>
   <header>
     <div class="topbar">
-      <div class="logo">✦ UFO STORE</div>
+      <!-- LOGO: SOLO LA IMAGEN SVG -->
+      <div class="logo">
+        <img src="logo.svg" alt="UFO STORE">
+      </div>
+
       <nav>
         <a id="navInicio">inicio</a>
         <a id="navCatalogo">catálogo</a>
@@ -618,6 +669,16 @@
     <div id="cartItems">
       <div class="empty">tu carrito está vacío.</div>
     </div>
+
+    <!-- Formulario de datos del cliente -->
+    <div class="cliente-form">
+      <label for="nombreCliente">tu nombre</label>
+      <input type="text" id="nombreCliente" placeholder="ej: María González" required>
+      
+      <label for="emailCliente">tu correo electrónico</label>
+      <input type="email" id="emailCliente" placeholder="ej: maria@correo.com" required>
+    </div>
+
     <div class="cart-footer">
       <div class="total">
         <span>total</span>
@@ -634,7 +695,7 @@
   <script>
     // ===================== DATOS DE PRODUCTOS =====================
     const productos = [
-      // Destacados (solo estos se muestran en la página principal)
+      // Destacados
       { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/400/400", destacado: true },
       { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/400/400", destacado: true },
       { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/400/400", destacado: true },
@@ -824,7 +885,6 @@
       navCatalogo.addEventListener('click', mostrarCatalogo);
       volverInicio.addEventListener('click', mostrarInicio);
 
-      // Por defecto mostrar inicio
       mostrarInicio();
     }
 
@@ -834,6 +894,9 @@
       const closeCart = document.getElementById('closeCart');
       const cartPanel = document.getElementById('cart');
       const overlay = document.getElementById('overlay');
+      const orderButton = document.getElementById('orderButton');
+      const nombreInput = document.getElementById('nombreCliente');
+      const emailInput = document.getElementById('emailCliente');
 
       function openCart() {
         cartPanel.classList.add('open');
@@ -857,36 +920,65 @@
         }
       });
 
-      // ===================== ENVIAR POR CORREO =====================
-      document.getElementById('orderButton').addEventListener('click', () => {
+      // Validar campos del formulario en tiempo real
+      function validarFormulario() {
+        const nombre = nombreInput.value.trim();
+        const email = emailInput.value.trim();
         const items = Object.values(cart);
+        
+        if (nombre && email && items.length > 0) {
+          orderButton.disabled = false;
+        } else {
+          orderButton.disabled = true;
+        }
+      }
+
+      nombreInput.addEventListener('input', validarFormulario);
+      emailInput.addEventListener('input', validarFormulario);
+
+      // ===================== ENVIAR POR CORREO =====================
+      orderButton.addEventListener('click', () => {
+        const items = Object.values(cart);
+        const nombre = nombreInput.value.trim();
+        const email = emailInput.value.trim();
+
         if (!items.length) {
           showToast('⚠️ Tu carrito está vacío');
           return;
         }
 
+        if (!nombre || !email) {
+          showToast('⚠️ Por favor completa tu nombre y correo');
+          return;
+        }
+
         const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
         
-        // Construir el cuerpo del correo
-        let subject = "Nuevo pedido - UFO STORE";
-        let body = "Hola, quiero hacer este pedido:\n\n";
+        let subject = `Nuevo pedido de ${nombre} - UFO STORE`;
+        let body = `DATOS DEL CLIENTE:\n`;
+        body += `Nombre: ${nombre}\n`;
+        body += `Correo: ${email}\n\n`;
+        body += `DETALLE DEL PEDIDO:\n`;
         
         items.forEach(item => {
           body += `${item.quantity} × ${item.name} — ${money(item.price * item.quantity)}\n`;
         });
         body += `\nTotal: ${money(total)}\n\n`;
-        body += "Gracias!";
+        body += `Muchas gracias por tu pedido!`;
 
-        // Cambia este correo por el tuyo
-        const email = "tucorreo@ejemplo.com";
-        const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const emailDestino = "ufoillust@gmail.com";
+        const mailtoLink = `mailto:${emailDestino}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-        // Abrir el cliente de correo
         window.open(mailtoLink, '_blank');
         
-        // Opcional: cerrar el carrito después de enviar
-        closeCartPanel();
+        showToast('📧 Pedido enviado por correo');
+        
+        setTimeout(() => {
+          closeCartPanel();
+        }, 500);
       });
+
+      validarFormulario();
     }
 
     // ===================== INICIALIZACIÓN =====================
