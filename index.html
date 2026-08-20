@@ -81,7 +81,6 @@
       width: 100%;
     }
 
-    /* ===== MENÚ HAMBURGUESA ===== */
     .menu-toggle {
       display: none;
       flex-direction: column;
@@ -301,7 +300,6 @@
       content: '+ ';
     }
 
-    /* ===== MODAL CORREGIDO ===== */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -328,7 +326,6 @@
       overflow-y: auto;
     }
 
-    /* === IMAGEN DEL MODAL - SIN BORDES BLANCOS === */
     .modal-content .modal-image-wrapper {
       width: 100%;
       background: #f5f5f5;
@@ -341,7 +338,7 @@
     .modal-content .modal-image-wrapper img {
       width: 100%;
       height: auto;
-      max-height: 70vh;  /* Aumentado para PC */
+      max-height: 70vh;
       object-fit: contain;
       display: block;
       background: #f5f5f5;
@@ -423,7 +420,6 @@
       background: #f5f5f5;
       border-color: #bbb;
     }
-    /* ===== FIN MODAL ===== */
 
     .catalog-page {
       display: none;
@@ -733,44 +729,35 @@
       letter-spacing: .05em;
     }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 800px) {
       .products {
         grid-template-columns: repeat(2, 1fr);
         gap: 24px 16px;
       }
-
       nav {
         display: none;
       }
-
       .menu-toggle {
         display: flex;
       }
-
       .topbar {
         padding: 16px 20px;
       }
-
       .cart {
         width: 100%;
       }
-
       .modal-content {
         max-width: 95%;
         margin: 10px;
       }
-
       .modal-body {
         padding: 20px;
       }
-
       .modal-body h2 {
         font-size: 18px;
       }
-
       .modal-content .modal-image-wrapper img {
-        max-height: 50vh;  /* En móvil se reduce */
+        max-height: 50vh;
       }
     }
 
@@ -778,29 +765,23 @@
       .products {
         gap: 20px 12px;
       }
-
       main {
         padding-left: 16px;
         padding-right: 16px;
       }
-
       .topbar {
         padding-left: 16px;
         padding-right: 16px;
       }
-
       .product-name {
         font-size: 13px;
       }
-
       .product-price {
         font-size: 13px;
       }
-
       .modal-buttons {
         flex-direction: column;
       }
-
       .modal-buttons .add-modal,
       .modal-buttons .close-modal {
         width: 100%;
@@ -816,21 +797,17 @@
       <div class="logo">
         <img src="logo.png" alt="UFO STORE">
       </div>
-
       <nav>
         <a id="navInicio">inicio</a>
         <a id="navCatalogo">catálogo</a>
       </nav>
-
       <button class="menu-toggle" id="menuToggle" aria-label="Menú">
         <span></span>
         <span></span>
         <span></span>
       </button>
-
       <button id="cartButton">🛒 <span id="cartCount">0</span></button>
     </div>
-
     <div class="mobile-menu" id="mobileMenu">
       <a id="mobileInicio">inicio</a>
       <a id="mobileCatalogo">catálogo</a>
@@ -845,7 +822,6 @@
           <p>una selección de mis ilustraciones y productos.</p>
         </div>
       </section>
-
       <section id="destacados" class="featured">
         <div class="section-heading">
           <span>✦ destacados</span>
@@ -853,7 +829,6 @@
         <div class="products featured-products" id="destacadosContainer"></div>
       </section>
     </div>
-
     <div id="paginaCatalogo" class="catalog-page">
       <a class="back-link" id="volverInicio">volver al inicio</a>
       <div class="catalog-header">
@@ -870,7 +845,6 @@
     </div>
   </main>
 
-  <!-- MODAL CORREGIDO -->
   <div class="modal-overlay" id="productModal">
     <div class="modal-content">
       <div class="modal-image-wrapper">
@@ -919,26 +893,456 @@
   </footer>
 
   <script>
-    // ===================== PRODUCTOS =====================
+    // ===================== TODOS TUS PRODUCTOS =====================
     const productos = [
-      // Destacados
-      { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/600/600", destacado: true, descripcion: "Poster de alta calidad con ilustración de un gato en el espacio. Perfecto para decorar tu habitación." },
-      { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/600/600", destacado: true, descripcion: "Sticker vinílico de gato, resistente al agua. Ideal para laptops, libretas o donde quieras." },
-      { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/600/600", destacado: true, descripcion: "Ilustración original impresa en papel de alta calidad. Medidas 30x40 cm." },
-      { id: 4, nombre: "Chapita personaje", precio: 1500, categoria: "chapitas", imagen: "https://picsum.photos/seed/chapita/600/600", destacado: true, descripcion: "Chapita de metal con diseño de personaje. Ideal para mochilas, chaquetas o gorras." },
-      // Posters
-      { id: 5, nombre: "Poster ciudad nocturna", precio: 5500, categoria: "posters", imagen: "https://picsum.photos/seed/ciudad/600/600", descripcion: "Vista nocturna de una ciudad futurista. Poster en papel mate de 30x40 cm." },
-      { id: 6, nombre: "Poster espacio profundo", precio: 7000, categoria: "posters", imagen: "https://picsum.photos/seed/espacio/600/600", descripcion: "Explora el universo con este poster de espacio profundo. Detalles increíbles." },
-      { id: 12, nombre: "Poster aurora boreal", precio: 6500, categoria: "posters", imagen: "https://picsum.photos/seed/aurora/600/600", descripcion: "Captura la magia de la aurora boreal en tu pared. Colores vibrantes." },
-      // Stickers
-      { id: 7, nombre: "Sticker alien", precio: 1800, categoria: "stickers", imagen: "https://picsum.photos/seed/alien/600/600", descripcion: "Sticker de alienígena, perfecto para los amantes del espacio y lo extraterrestre." },
-      { id: 8, nombre: "Sticker planeta", precio: 2200, categoria: "stickers", imagen: "https://picsum.photos/seed/planeta/600/600", descripcion: "Sticker de planeta con diseño detallado. Resistente al agua y al sol." },
-      { id: 9, nombre: "Sticker cohete", precio: 2500, categoria: "stickers", imagen: "https://picsum.photos/seed/cohete/600/600", descripcion: "Sticker de cohete espacial, ideal para decorar tu laptop o cuaderno." },
-      { id: 13, nombre: "Sticker constelación", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/constelacion/600/600", descripcion: "Sticker de constelación con estrellas brillantes. Perfecto para un toque cósmico." },
-      // Chapitas
-      { id: 10, nombre: "Chapita sol", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/sol/600/600", descripcion: "Chapita con diseño del sol. Metal resistente con cierre de seguridad." },
-      { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/600/600", descripcion: "Chapita con diseño de luna. Perfecta para tu chaqueta o mochila." },
-      { id: 14, nombre: "Chapita estrella", precio: 1300, categoria: "chapitas", imagen: "https://picsum.photos/seed/estrella/600/600", descripcion: "Chapita de estrella fugaz. Ideal para darle un toque especial a tus accesorios." }
+      // ==================== POSTERS (9) ====================
+      { 
+        id: 1, 
+        nombre: "Poster Hajime", 
+        precio: 5000, 
+        categoria: "posters", 
+        imagen: "img/poster-hajime.jpg", 
+        destacado: true, 
+        descripcion: "Poster de Hajime con ilustración de alta calidad. Perfecto para decorar tu espacio." 
+      },
+      { 
+        id: 2, 
+        nombre: "Poster Lizzik", 
+        precio: 5000, 
+        categoria: "posters", 
+        imagen: "img/poster-lizzik.jpg", 
+        destacado: true, 
+        descripcion: "Poster de Lizzik con diseño detallado y colores vibrantes." 
+      },
+      { 
+        id: 3, 
+        nombre: "Poster Doughberman", 
+        precio: 5500, 
+        categoria: "posters", 
+        imagen: "img/poster-doughberman.jpg", 
+        destacado: false, 
+        descripcion: "Poster de Doughberman, ilustración única para tu colección." 
+      },
+      { 
+        id: 4, 
+        nombre: "Poster Hung", 
+        precio: 5000, 
+        categoria: "posters", 
+        imagen: "img/poster-hung.jpg", 
+        destacado: false, 
+        descripcion: "Poster de Hung con estilo característico y gran detalle." 
+      },
+      { 
+        id: 5, 
+        nombre: "Poster We Bare Bears", 
+        precio: 5000, 
+        categoria: "posters", 
+        imagen: "img/poster-we-bare-bears.jpg", 
+        destacado: false, 
+        descripcion: "Poster de We Bare Bears, ideal para fans de la serie." 
+      },
+      { 
+        id: 6, 
+        nombre: "Poster Volibear Spirit Blossom Springs", 
+        precio: 5000, 
+        categoria: "posters", 
+        imagen: "img/poster-volibear-spirit-blossom-springs.jpg", 
+        destacado: false, 
+        descripcion: "Poster de Volibear Spirit Blossom Springs con arte impresionante." 
+      },
+      { 
+        id: 7, 
+        nombre: "Poster Von Lycaon", 
+        precio: 5000, 
+        categoria: "posters", 
+        imagen: "img/poster-von-lycaon.jpg", 
+        destacado: false, 
+        descripcion: "Poster de Von Lycaon con diseño elegante y detallado." 
+      },
+      { 
+        id: 8, 
+        nombre: "Poster Indigo", 
+        precio: 4500, 
+        categoria: "posters", 
+        imagen: "img/poster-indigo.jpg", 
+        destacado: false, 
+        descripcion: "Poster de Indigo, ilustración con estilo único." 
+      },
+      { 
+        id: 9, 
+        nombre: "Poster Kairo", 
+        precio: 4500, 
+        categoria: "posters", 
+        imagen: "img/poster-kairo.jpg", 
+        destacado: false, 
+        descripcion: "Poster de Kairo con diseño moderno y atractivo." 
+      },
+
+      // ==================== STICKERS (24) ====================
+      { 
+        id: 10, 
+        nombre: "Sticker Fletcher Kane", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-fletcher-kane.jpg", 
+        destacado: true, 
+        descripcion: "Sticker vinílico de Fletcher Kane, resistente al agua." 
+      },
+      { 
+        id: 11, 
+        nombre: "Sticker Kingston", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-kingston.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Kingston, ideal para laptops, libretas o donde quieras." 
+      },
+      { 
+        id: 12, 
+        nombre: "Sticker Wendell", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-wendell.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Wendell con diseño divertido y colorido." 
+      },
+      { 
+        id: 13, 
+        nombre: "Sticker Oscar", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-oscar.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Oscar, perfecto para decorar tus objetos." 
+      },
+      { 
+        id: 14, 
+        nombre: "Sticker Meowscles", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-meowscles.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Meowscles, resistente y de alta calidad." 
+      },
+      { 
+        id: 15, 
+        nombre: "Sticker Toriel", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-toriel.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Toriel, un toque especial para tu colección." 
+      },
+      { 
+        id: 16, 
+        nombre: "Sticker Asgore", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-asgore.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Asgore con diseño detallado." 
+      },
+      { 
+        id: 17, 
+        nombre: "Sticker Nick Wilde", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-nick-wilde.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Nick Wilde, ideal para fans de Zootopia." 
+      },
+      { 
+        id: 18, 
+        nombre: "Sticker Juddy Hopps", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-juddy-hopps.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Juddy Hopps, diseño adorable y resistente." 
+      },
+      { 
+        id: 19, 
+        nombre: "Sticker Warwick", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-warwick.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Warwick con arte impactante." 
+      },
+      { 
+        id: 20, 
+        nombre: "Sticker Glamrock Freddy", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-glamrock-freddy.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Glamrock Freddy, perfecto para fans de FNAF." 
+      },
+      { 
+        id: 21, 
+        nombre: "Sticker Monty", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-monty.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Monty con diseño único." 
+      },
+      { 
+        id: 22, 
+        nombre: "Sticker Glamrock Chica", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-glamrock-chica.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Glamrock Chica, resistente y colorido." 
+      },
+      { 
+        id: 23, 
+        nombre: "Sticker Legoshi", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-legoshi.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Legoshi, ideal para fans de Beastars." 
+      },
+      { 
+        id: 24, 
+        nombre: "Sticker Roxy", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-roxy.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Roxy con diseño detallado." 
+      },
+      { 
+        id: 25, 
+        nombre: "Sticker Blaidd", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-blaidd.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Blaidd, perfecto para decorar tus objetos." 
+      },
+      { 
+        id: 26, 
+        nombre: "Sticker Gummigoo", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-gummigoo.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Gummigoo, diseño divertido y colorido." 
+      },
+      { 
+        id: 27, 
+        nombre: "Sticker Chad", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-chad.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Chad, resistente y de alta calidad." 
+      },
+      { 
+        id: 28, 
+        nombre: "Sticker Max", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-max.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Max, un toque especial para tu colección." 
+      },
+      { 
+        id: 29, 
+        nombre: "Sticker Juan Carlos Bodoque", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-juan-carlos-bodoque.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Juan Carlos Bodoque, ideal para fans de 31 Minutos." 
+      },
+      { 
+        id: 30, 
+        nombre: "Sticker Ben Bigger", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-ben-bigger.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Ben Bigger con diseño único." 
+      },
+      { 
+        id: 31, 
+        nombre: "Sticker Von Lycaon", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-von-lycaon-sticker.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Von Lycaon, resistente y colorido." 
+      },
+      { 
+        id: 32, 
+        nombre: "Sticker Pan Yinhu", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-pan-yinhu.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Pan Yinhu, diseño detallado." 
+      },
+      { 
+        id: 33, 
+        nombre: "Sticker Adastra", 
+        precio: 800, 
+        categoria: "stickers", 
+        imagen: "img/sticker-adastra.jpg", 
+        destacado: false, 
+        descripcion: "Sticker de Adastra, perfecto para decorar tus objetos." 
+      },
+
+      // ==================== CHAPITAS 37mm (11) ====================
+      { 
+        id: 34, 
+        nombre: "Chapita Toriel", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-toriel.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Toriel. Metal resistente con cierre de seguridad." 
+      },
+      { 
+        id: 35, 
+        nombre: "Chapita Asgore", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-asgore.jpg", 
+        destacado: true, 
+        descripcion: "Chapita de 37mm con diseño de Asgore. Ideal para mochilas, chaquetas o gorras." 
+      },
+      { 
+        id: 36, 
+        nombre: "Chapita Von Lycaon", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-von-lycaon-37mm.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Von Lycaon. Metal de alta calidad." 
+      },
+      { 
+        id: 37, 
+        nombre: "Chapita Ben Bigger", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-ben-bigger.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Ben Bigger. Resistente y duradera." 
+      },
+      { 
+        id: 38, 
+        nombre: "Chapita Pan Yinhu", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-pan-yinhu.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Pan Yinhu. Perfecta para tu colección." 
+      },
+      { 
+        id: 39, 
+        nombre: "Chapita Roxy", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-roxy.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Roxy. Ideal para mochilas y chaquetas." 
+      },
+      { 
+        id: 40, 
+        nombre: "Chapita Glamrock Chica", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-glamrock-chica.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Glamrock Chica. Metal resistente." 
+      },
+      { 
+        id: 41, 
+        nombre: "Chapita Monty", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-monty.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Monty. Cierre de seguridad incluido." 
+      },
+      { 
+        id: 42, 
+        nombre: "Chapita Juddy Hopps", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-juddy-hopps.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Juddy Hopps. Ideal para fans de Zootopia." 
+      },
+      { 
+        id: 43, 
+        nombre: "Chapita Nick Wilde", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-nick-wilde.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Nick Wilde. Metal de alta calidad." 
+      },
+      { 
+        id: 44, 
+        nombre: "Chapita Juan Carlos Bodoque", 
+        precio: 1500, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-juan-carlos-bodoque.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 37mm con diseño de Juan Carlos Bodoque. Ideal para fans de 31 Minutos." 
+      },
+
+      // ==================== CHAPITAS 58mm (5) ====================
+      { 
+        id: 45, 
+        nombre: "Chapita Von Lycaon 58mm", 
+        precio: 3000, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-von-lycaon-58mm.jpg", 
+        destacado: true, 
+        descripcion: "Chapita de 58mm con diseño de Von Lycaon. Tamaño grande, metal resistente." 
+      },
+      { 
+        id: 46, 
+        nombre: "Chapita Volibear 58mm", 
+        precio: 3000, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-volibear-spirit-blossom-springs-58mm.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 58mm con diseño de Volibear Spirit Blossom Springs. Ideal para destacar." 
+      },
+      { 
+        id: 47, 
+        nombre: "Chapita Hajime 58mm", 
+        precio: 3000, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-hajime-58mm.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 58mm con diseño de Hajime. Gran tamaño para lucir." 
+      },
+      { 
+        id: 48, 
+        nombre: "Chapita Hung 58mm", 
+        precio: 3000, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-hung-58mm.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 58mm con diseño de Hung. Perfecta para chaquetas y mochilas." 
+      },
+      { 
+        id: 49, 
+        nombre: "Chapita Gummigoo, Chad y Max 58mm", 
+        precio: 3000, 
+        categoria: "chapitas", 
+        imagen: "img/chapita-gummigoo-chad-max-58mm.jpg", 
+        destacado: false, 
+        descripcion: "Chapita de 58mm con diseño de Gummigoo, Chad y Max. ¡Tres personajes en una!" 
+      }
     ];
 
     // ===================== CARRITO =====================
@@ -1114,7 +1518,6 @@
         menuToggle.classList.remove('active');
       }
 
-      // Toggle menú hamburguesa
       menuToggle.addEventListener('click', function() {
         this.classList.toggle('active');
         mobileMenu.classList.toggle('open');
