@@ -38,7 +38,6 @@
       gap: 24px;
     }
 
-    /* ===== LOGO ===== */
     .logo {
       display: flex;
       align-items: center;
@@ -56,12 +55,10 @@
         height: 45px;
         width: auto;
       }
-      
       .topbar {
         padding: 12px 16px;
       }
     }
-    /* ===== FIN LOGO ===== */
 
     nav {
       display: flex;
@@ -181,7 +178,7 @@
       overflow: hidden;
       border-radius: 12px;
       position: relative;
-      cursor: pointer;  /* <-- NUEVO: indica que es clickeable */
+      cursor: pointer;
     }
 
     .product-image img {
@@ -205,7 +202,7 @@
       padding: 4px 10px;
       border-radius: 20px;
       letter-spacing: .05em;
-      pointer-events: none;  /* <-- NUEVO: evita que el badge interfiera con el click */
+      pointer-events: none;
     }
 
     .product-info {
@@ -249,7 +246,7 @@
       content: '+ ';
     }
 
-    /* ===== MODAL DE PRODUCTO ===== */
+    /* ===== MODAL ===== */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -260,7 +257,6 @@
       justify-content: center;
       padding: 20px;
       backdrop-filter: blur(4px);
-      animation: fadeIn 0.3s ease;
     }
 
     .modal-overlay.open {
@@ -273,7 +269,6 @@
       width: 100%;
       border-radius: 20px;
       overflow: hidden;
-      animation: slideUp 0.3s ease;
       max-height: 90vh;
       overflow-y: auto;
     }
@@ -364,25 +359,8 @@
       border-color: #bbb;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
     /* ===== FIN MODAL ===== */
 
-    /* Catálogo - Página separada */
     .catalog-page {
       display: none;
       padding-top: 20px;
@@ -455,7 +433,6 @@
       content: '← ';
     }
 
-    /* Carrito */
     .overlay {
       position: fixed;
       inset: 0;
@@ -577,7 +554,6 @@
       font-weight: 500;
     }
 
-    /* Formulario de cliente */
     .cliente-form {
       padding: 16px 24px;
       border-top: 1px solid #eee;
@@ -671,20 +647,10 @@
       border-radius: 30px;
       font-size: 13px;
       z-index: 99;
-      animation: slideUp 0.3s ease;
       box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
       pointer-events: none;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
+      opacity: 1;
+      transition: opacity 0.3s;
     }
 
     .site-footer {
@@ -703,34 +669,27 @@
       letter-spacing: .05em;
     }
 
-    /* Responsive */
     @media (max-width: 800px) {
       .products {
         grid-template-columns: repeat(2, 1fr);
         gap: 24px 16px;
       }
-
       nav {
         display: none;
       }
-
       .topbar {
         padding: 16px 20px;
       }
-
       .cart {
         width: 100%;
       }
-
       .modal-content {
         max-width: 95%;
         margin: 10px;
       }
-
       .modal-body {
         padding: 20px;
       }
-
       .modal-body h2 {
         font-size: 18px;
       }
@@ -740,29 +699,23 @@
       .products {
         gap: 20px 12px;
       }
-
       main {
         padding-left: 16px;
         padding-right: 16px;
       }
-
       .topbar {
         padding-left: 16px;
         padding-right: 16px;
       }
-
       .product-name {
         font-size: 13px;
       }
-
       .product-price {
         font-size: 13px;
       }
-
       .modal-buttons {
         flex-direction: column;
       }
-
       .modal-buttons .add-modal,
       .modal-buttons .close-modal {
         width: 100%;
@@ -778,7 +731,6 @@
       <div class="logo">
         <img src="logo.png" alt="UFO STORE">
       </div>
-
       <nav>
         <a id="navInicio">inicio</a>
         <a id="navCatalogo">catálogo</a>
@@ -806,24 +758,21 @@
 
     <div id="paginaCatalogo" class="catalog-page">
       <a class="back-link" id="volverInicio">volver al inicio</a>
-      
       <div class="catalog-header">
         <h2>todos los productos</h2>
         <p>explora toda la colección</p>
       </div>
-
       <div class="filtros">
         <button class="filtro-btn active" data-categoria="todos">todos</button>
         <button class="filtro-btn" data-categoria="posters">posters</button>
         <button class="filtro-btn" data-categoria="stickers">stickers</button>
         <button class="filtro-btn" data-categoria="chapitas">chapitas</button>
       </div>
-
       <div class="products" id="catalogoContainer"></div>
     </div>
   </main>
 
-  <!-- ===== MODAL DE PRODUCTO ===== -->
+  <!-- MODAL -->
   <div class="modal-overlay" id="productModal">
     <div class="modal-content">
       <img id="modalImage" src="" alt="">
@@ -839,7 +788,6 @@
       </div>
     </div>
   </div>
-  <!-- ===== FIN MODAL ===== -->
 
   <div class="overlay" id="overlay"></div>
 
@@ -851,15 +799,12 @@
     <div id="cartItems">
       <div class="empty">tu carrito está vacío.</div>
     </div>
-
     <div class="cliente-form">
       <label for="nombreCliente">tu nombre</label>
       <input type="text" id="nombreCliente" placeholder="ej: María González" required>
-      
       <label for="emailCliente">tu correo electrónico</label>
       <input type="email" id="emailCliente" placeholder="ej: maria@correo.com" required>
     </div>
-
     <div class="cart-footer">
       <div class="total">
         <span>total</span>
@@ -874,25 +819,22 @@
   </footer>
 
   <script>
-    // ===================== DATOS DE PRODUCTOS =====================
+    // ===================== PRODUCTOS =====================
     const productos = [
       // Destacados
       { id: 1, nombre: "Poster gato espacial", precio: 5000, categoria: "posters", imagen: "https://picsum.photos/seed/gato/600/600", destacado: true, descripcion: "Poster de alta calidad con ilustración de un gato en el espacio. Perfecto para decorar tu habitación." },
       { id: 2, nombre: "Sticker gato", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/sticker/600/600", destacado: true, descripcion: "Sticker vinílico de gato, resistente al agua. Ideal para laptops, libretas o donde quieras." },
       { id: 3, nombre: "Poster ilustración", precio: 6000, categoria: "posters", imagen: "https://picsum.photos/seed/ilustracion/600/600", destacado: true, descripcion: "Ilustración original impresa en papel de alta calidad. Medidas 30x40 cm." },
       { id: 4, nombre: "Chapita personaje", precio: 1500, categoria: "chapitas", imagen: "https://picsum.photos/seed/chapita/600/600", destacado: true, descripcion: "Chapita de metal con diseño de personaje. Ideal para mochilas, chaquetas o gorras." },
-
       // Posters
       { id: 5, nombre: "Poster ciudad nocturna", precio: 5500, categoria: "posters", imagen: "https://picsum.photos/seed/ciudad/600/600", descripcion: "Vista nocturna de una ciudad futurista. Poster en papel mate de 30x40 cm." },
       { id: 6, nombre: "Poster espacio profundo", precio: 7000, categoria: "posters", imagen: "https://picsum.photos/seed/espacio/600/600", descripcion: "Explora el universo con este poster de espacio profundo. Detalles increíbles." },
       { id: 12, nombre: "Poster aurora boreal", precio: 6500, categoria: "posters", imagen: "https://picsum.photos/seed/aurora/600/600", descripcion: "Captura la magia de la aurora boreal en tu pared. Colores vibrantes." },
-
       // Stickers
       { id: 7, nombre: "Sticker alien", precio: 1800, categoria: "stickers", imagen: "https://picsum.photos/seed/alien/600/600", descripcion: "Sticker de alienígena, perfecto para los amantes del espacio y lo extraterrestre." },
       { id: 8, nombre: "Sticker planeta", precio: 2200, categoria: "stickers", imagen: "https://picsum.photos/seed/planeta/600/600", descripcion: "Sticker de planeta con diseño detallado. Resistente al agua y al sol." },
       { id: 9, nombre: "Sticker cohete", precio: 2500, categoria: "stickers", imagen: "https://picsum.photos/seed/cohete/600/600", descripcion: "Sticker de cohete espacial, ideal para decorar tu laptop o cuaderno." },
       { id: 13, nombre: "Sticker constelación", precio: 2000, categoria: "stickers", imagen: "https://picsum.photos/seed/constelacion/600/600", descripcion: "Sticker de constelación con estrellas brillantes. Perfecto para un toque cósmico." },
-
       // Chapitas
       { id: 10, nombre: "Chapita sol", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/sol/600/600", descripcion: "Chapita con diseño del sol. Metal resistente con cierre de seguridad." },
       { id: 11, nombre: "Chapita luna", precio: 1200, categoria: "chapitas", imagen: "https://picsum.photos/seed/luna/600/600", descripcion: "Chapita con diseño de luna. Perfecta para tu chaqueta o mochila." },
@@ -965,7 +907,8 @@
       toast.className = 'toast';
       toast.textContent = message;
       document.body.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2000);
+      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+      setTimeout(() => toast.remove(), 2500);
     }
 
     // ===================== MODAL =====================
@@ -992,6 +935,8 @@
     // ===================== RENDERIZAR PRODUCTOS =====================
     function renderizarProductos(lista, contenedorId, esDestacado = false) {
       const contenedor = document.getElementById(contenedorId);
+      if (!contenedor) return;
+      
       const filtrados = esDestacado ? lista.filter(p => p.destacado) : lista;
       
       contenedor.innerHTML = filtrados.map(producto => `
@@ -1020,7 +965,7 @@
       // Evento para agregar al carrito
       contenedor.querySelectorAll('.add').forEach(btn => {
         btn.addEventListener('click', function(e) {
-          e.stopPropagation(); // Evita que se abra el modal
+          e.stopPropagation();
           const name = this.dataset.name;
           const price = Number(this.dataset.price);
           addToCart(name, price);
@@ -1077,6 +1022,8 @@
       const orderButton = document.getElementById('orderButton');
       const nombreInput = document.getElementById('nombreCliente');
       const emailInput = document.getElementById('emailCliente');
+      const modalClose = document.getElementById('modalCloseButton');
+      const modalAdd = document.getElementById('modalAddButton');
 
       function openCart() {
         cartPanel.classList.add('open');
@@ -1093,6 +1040,23 @@
       cartButton.addEventListener('click', openCart);
       closeCart.addEventListener('click', closeCartPanel);
       overlay.addEventListener('click', closeCartPanel);
+      modalClose.addEventListener('click', closeModal);
+      
+      // Cerrar modal haciendo clic fuera
+      document.getElementById('productModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+      });
+
+      // Agregar desde el modal
+      modalAdd.addEventListener('click', function() {
+        if (currentProductId) {
+          const producto = productos.find(p => p.id === currentProductId);
+          if (producto) {
+            addToCart(producto.nombre, producto.precio);
+            closeModal();
+          }
+        }
+      });
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -1104,5 +1068,32 @@
         }
       });
 
-      // Cerrar modal con clic en overlay
-      document.getElementById('productModal').addEventListener('click', function(e)
+      function validarFormulario() {
+        const nombre = nombreInput.value.trim();
+        const email = emailInput.value.trim();
+        const items = Object.values(cart);
+        if (nombre && email && items.length > 0) {
+          orderButton.disabled = false;
+        } else {
+          orderButton.disabled = true;
+        }
+      }
+
+      nombreInput.addEventListener('input', validarFormulario);
+      emailInput.addEventListener('input', validarFormulario);
+
+      orderButton.addEventListener('click', () => {
+        const items = Object.values(cart);
+        const nombre = nombreInput.value.trim();
+        const email = emailInput.value.trim();
+
+        if (!items.length) {
+          showToast('⚠️ Tu carrito está vacío');
+          return;
+        }
+        if (!nombre || !email) {
+          showToast('⚠️ Por favor completa tu nombre y correo');
+          return;
+        }
+
+        const
